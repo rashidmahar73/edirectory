@@ -1,0 +1,33 @@
+.dashboard-Container{
+    margin-left: 100px;
+    background-color:black;
+}
+.mainDivHeader{
+    margin-top: 100px;
+    padding-left: 40px;
+    padding-right: 80px;
+}
+.mainTitleHeading{
+    margin:0px;
+    color:white;
+    padding-bottom: 50px;
+}
+.headerimg{
+    width: 100%;
+    height: 100%;
+}
+.cardMainRow{
+    padding-top: 50px;
+    background-color: gray;
+}
+.ant-card{
+    border: none;
+    margin-bottom: 20px;
+} 
+.ant-card-body{
+    background-color: black;
+}
+.ant-card .ant-card-meta-title {
+    color: white;
+
+}
