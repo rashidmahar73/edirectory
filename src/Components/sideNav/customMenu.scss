@@ -1,0 +1,13 @@
+.sideNav-container .ant-menu-item-selected .ant-menu-item-icon {
+  align-items: center;
+  background: #006ab3;
+  border-radius: 14px;
+  display: flex;
+  height: 46px;
+  justify-content: center;
+  margin-left: -13px !important;
+  width: 46px;
+}
+.sideNav-container .ant-menu-item-selected .ant-menu-item-icon path {
+  fill: white;
+}

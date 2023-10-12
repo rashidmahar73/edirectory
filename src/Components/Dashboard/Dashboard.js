@@ -27,14 +27,14 @@ const Dashboard = () => {
         "https://api.themoviedb.org/3/genre/movie/list"
       );
       if (data !== undefined && data !== null) {
-        let chanhgable = data?.genres.map((item) => {
+        let changable = data?.genres.map((item) => {
           item.value = item.id;
           item.label = item.name;
           delete item.id;
           delete item.name;
           return item;
         });
-        setGenreIdsData(chanhgable);
+        setGenreIdsData(changable);
       }
       const moviesData = await ApiHandler("moviesData", genereIdValue);
       if (moviesData !== undefined && moviesData !== null) {
@@ -63,16 +63,7 @@ const Dashboard = () => {
           onChange={(value) => setGenreIdValue(value)}
           options={genreIdsData}
         /> */}
-        {/* <Row>
-          <Col lg={24}>
-            <h1>for Header</h1>
-          </Col>
-        </Row> */}
-        <Spin size="large" spinning={loading}>
-          {loading ? (
-            <h1>User loading</h1>
-          ) : (
-            <span>
+          <Spin size="large" spinning={loading}>
               <Row>
                 {filtered &&
                   filtered.map((item) => {
@@ -99,7 +90,7 @@ const Dashboard = () => {
               <Row className="cardMainRow">
                 {movieslist &&
                   movieslist.map((item) => {
-                    let { title, poster_path, backdrop_path } = item;
+                    const { title, poster_path, backdrop_path } = item;
                     return (
                       <React.Fragment>
                         <Col lg={4}>
@@ -126,8 +117,6 @@ const Dashboard = () => {
                     );
                   })}
               </Row>
-            </span>
-          )}
         </Spin>
       </div>
     </React.Fragment>

@@ -18,6 +18,8 @@
     "react-scripts": "5.0.1",
     "redux-persist": "^6.0.0",
     "redux-saga": "^1.2.3",
+    "sass": "^1.69.2",
+    "sass-loader": "^13.3.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

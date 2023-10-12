@@ -4,9 +4,13 @@ import { Button } from 'antd';
 import { Link } from 'react-router-dom';
 import { SignUp } from './Components/SIgnUp/SignUp';
 import Dashboard from './Components/Dashboard/Dashboard';
+import SideLayout from './Components/sideNav';
 
 function App() {
-  return <Dashboard/>
+  return (<>
+  <SideLayout/>
+  {/* <Dashboard/> */}
+  </>)
   // return (
   //   <div className="App">
   //  {/* <Button type="primary"><Link to="/GenreIds">Primary Button</Link></Button> */}
