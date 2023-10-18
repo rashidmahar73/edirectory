@@ -1,0 +1,29 @@
+.card-hover {
+    transition: transform 0.2s;
+  }
+  .card-hover:hover {
+    -webkit-transform: scale(1.25); /* Safari and Chrome */
+    -moz-transform: scale(1.25); /* Firefox */
+    -ms-transform: scale(1.25); /* IE 9 */
+    -o-transform: scale(1.25); /* Opera */
+    transform: scale(1.25);
+    position: absolute;
+    z-index: 100;
+  }
+  .ant-card {
+    border: none;
+    margin-bottom: 20px;
+  }
+  .ant-card-body {
+    background-color: rgba(128, 128, 128, 0.226);
+  }
+  .ant-card .ant-card-meta-title {
+    color: black;
+    font-size: 10px;
+  }
+  .ant-card-bordered .ant-card-cover {
+    margin-inline-start: 0px;
+    margin-top: 0px;
+    margin-inline-end: 0px;
+  }
+  

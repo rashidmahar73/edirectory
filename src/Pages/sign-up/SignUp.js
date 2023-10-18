@@ -2,12 +2,14 @@ import React from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 import { Link } from "react-router-dom";
 import ApiHandler from "../../utils/ApiHandler";
-import axios from "axios";
 
-export function SignUp() {
+ function SignUp() {
   const onFinish = async (values) => {
-    await ApiHandler("GET");
-  };
+   const response= await ApiHandler("GET");
+   localStorage.setItem("token", response.data.request_token);
+   window.location.href = `https://www.themoviedb.org/authenticate/${response.data.request_token}?redirect_to=http://localhost:3000/signup`;
+  
+};
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -15,7 +17,7 @@ export function SignUp() {
   const session = () => {
     const getApiData = async () => {
       try {
-        let tok = localStorage.getItem("token");
+        let tok = localStorage.getItem("token1");
         console.log(tok, "tok");
         const response = await fetch(
           `https://api.themoviedb.org/3/authentication/session/new?api_key=c12531a82a60035f2bcdef9bb2c8ff3c&request_token=${tok}`,
@@ -28,7 +30,7 @@ export function SignUp() {
           }
         );
         const result = await response.json();
-        console.log(result, "result");
+        
         localStorage.setItem("sessionId", result.session_id);
       } catch (error) {
         console.error("Error:", error);
@@ -85,3 +87,5 @@ export function SignUp() {
     </>
   );
 }
+
+export {SignUp};
