@@ -1,0 +1,24 @@
+.details {
+  .ant-modal-content {
+    background: black;
+    padding: 0px;
+    margin: 0px;
+    .ant-modal-header {
+      background-color: black;
+      .ant-modal-title {
+        padding-left: 10px;
+        font-size: 1.5rem;
+        color: white;
+      }
+    }
+    button {
+      .ant-modal-close-x {
+        span {
+          svg {
+            fill: white;
+          }
+        }
+      }
+    }
+  }
+}

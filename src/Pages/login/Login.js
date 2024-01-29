@@ -9,10 +9,8 @@ export function Login(){
     let tok = localStorage.getItem("token");
     values.request_token=tok;
     let {username,password,request_token}=values;
-    console.log(values)
       try {
         let tok = localStorage.getItem("token");
-        console.log(tok, "tok");
         const response = await fetch(
           `https://api.themoviedb.org/3/authentication/token/validate_with_login?api_key=c12531a82a60035f2bcdef9bb2c8ff3c`,
           {
@@ -31,7 +29,6 @@ export function Login(){
           }
         );
         const result = await response.json();
-        console.log(result,new Date().getTime() , "result");
         localStorage.setItem("token1", result.request_token);
         result.success===true?navigate("/dashboard"):navigate("/login")
         localStorage.setItem("sessionId", result.session_id);
@@ -40,7 +37,6 @@ export function Login(){
       }
   };
     const onFinishFailed = (errorInfo) => {
-        console.log("Failed:", errorInfo);
        
       };
       let sessonIDAuthenticated=localStorage.getItem("sessionId");

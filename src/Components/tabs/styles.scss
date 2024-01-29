@@ -1,0 +1,71 @@
+.overview-container {
+    .title {
+      font-size: 1.5rem;
+      color: black;
+      font-weight: 700;
+      margin: 0px;
+      &:hover {
+        color: black;
+      }
+    }
+    .second-head {
+      display: flex;
+      .text {
+        font-size: 1rem;
+        margin: 0px;
+      }
+      .sub-text-1 {
+        padding-left: 10px;
+        font-size: 1rem;
+        margin: 0px;
+      }
+    }
+    .third-div {
+      .text {
+        font-size: 1rem;
+        margin: 0px;
+      }
+      .overview-head {
+        font-size: 1.5rem;
+        color: black;
+        font-weight: 700;
+        margin: 0px;
+      }
+    }
+    .table {
+      .head {
+        font-size: 1.5rem;
+        color: black;
+        font-weight: 700;
+        margin: 0px;
+      }
+      .inner-text {
+        font-size: 1rem;
+        font-weight: 500;
+        margin: 0px;
+        padding-top: 20px;
+      }
+      .inner-text:not(:first-child) {
+        padding-left: 10px;
+      }
+      .progress-bar {
+        .ant-progress-inner {
+          width: 80px !important;
+          height: 80px !important;
+          font-size: 16px !important;
+        }
+      }
+    }
+    .fourth-div {
+      .head {
+        font-size: 1.5rem;
+        color: black;
+        font-weight: 700;
+        margin: 0px;
+      }
+      .inner-div {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+  }

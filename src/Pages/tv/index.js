@@ -1,5 +1,4 @@
 import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
-import "./dashboard.scss";
 import { Select, Row, Col, Spin, Button, Tabs, Image, Progress } from "antd";
 import useFetchHook from "../../utils/useFetch";
 import moment from "moment/moment";

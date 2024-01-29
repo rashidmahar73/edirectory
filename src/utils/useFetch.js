@@ -8,7 +8,7 @@ export default function useFetchHook({ method, endpoint }) {
   useEffect(() => {
     ApiHandler();
   }, []);
-  async function ApiHandler(id) {
+  async function ApiHandler() {
     try {
       setIsLoading(true);
       const { data } = await ApiHandlerV2({ method, endpoint });

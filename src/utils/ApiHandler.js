@@ -3,25 +3,22 @@ import { api_key, moviesdata, tokenURL } from "../Api's URL/apiUrl";
 const ApiHandler = async (method, url) => {
   if (method === "GET") {
     try {
-      console.log(tokenURL,"tokenURL")
-      console.log(api_key,"apikey")
-      const response = await axios.get(`${tokenURL}?api_key=${api_key}`);
-      if(response){
+      const response = await axios.get(
+        `${tokenURL}?api_key=${api_key}`
+      );
+      if (response) {
         return response;
       }
-
-    } catch (error) {
-      console.log(error);
-    }
-  }else if(method==="moviesData"){
+    } catch (error) {}
+  } else if (method === "moviesData") {
     try {
-      const response = await axios.get(`${moviesdata}=${url}`);
-      if(response){
+      const response = await axios.get(
+        `${moviesdata}=${url}`
+      );
+      if (response) {
         return response;
       }
-  }catch(error){
-        
+    } catch (error) {}
   }
 };
-}
 export default ApiHandler;

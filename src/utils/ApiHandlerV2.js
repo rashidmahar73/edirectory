@@ -24,6 +24,5 @@ const ApiHandlerV2 = async ({ method, endpoint }) => {
       }
     } catch (error) {}
   }
-  
 };
 export default ApiHandlerV2;

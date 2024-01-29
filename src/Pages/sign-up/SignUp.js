@@ -12,13 +12,12 @@ import ApiHandler from "../../utils/ApiHandler";
 };
 
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+  
   };
   const session = () => {
     const getApiData = async () => {
       try {
         let tok = localStorage.getItem("token1");
-        console.log(tok, "tok");
         const response = await fetch(
           `https://api.themoviedb.org/3/authentication/session/new?api_key=c12531a82a60035f2bcdef9bb2c8ff3c&request_token=${tok}`,
           {
