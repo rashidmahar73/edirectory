@@ -15,14 +15,13 @@ function SideLayout() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const getid = localStorage.getItem("movieid");
+  console.log(getid,"getid")
   const genreid = localStorage.getItem("genreId");
   const handleSideBar = (key) => {
     if (key) {
       localStorage.setItem("genreId", null);
-      localStorage.setItem("forSameComp", null);
     }
     setSelectedKey(key);
-
     navigate(key);
   };
   // const isAuthenticated = localStorage.getItem("token");
@@ -46,11 +45,7 @@ function SideLayout() {
   }, [pathname]);
   const dashUrl =
     typeof genreid === null ? "/dashboard" : `/dashboard/${genreid}`;
-    const getItem=localStorage.getItem("forSameComp");
-    const dash2Url =
-    typeof genreid === null ? "/dashboard" : `/dashboard/${getItem}`;
-    console.log(dash2Url,"dash2Url")
-    console.log(dashUrl,"dashUrl")
+  
   return (
     <>
       {/* {isAuthenticated?( */}

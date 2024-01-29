@@ -1,12 +1,10 @@
 import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import "./dashboard.scss";
-import { Select, Row, Col, Spin, Button, Tabs, Image, Progress } from "antd";
+import { Select, Row, Col, Spin, Tabs, Switch } from "antd";
 import useFetchHook from "../../utils/useFetch";
-import moment from "moment";
-import { useLocation, useNavigate } from "react-router-dom";
-import ReactPlayer from "react-player";
+import { useLocation } from "react-router-dom";
 import useLazyFetch from "../../utils/useLazyFetch";
-import { ModalComp, CardComponent } from "../../Components";
+import { CardComponent, TabsComp, TypesComp, Header } from "../../Components";
 
 const Dashboard = () => {
   const location = useLocation();
@@ -17,12 +15,14 @@ const Dashboard = () => {
   const [movieDataId, setMovieDataId] = useState();
   const [video, setVideo] = useState(false);
   const [open, setOpen] = useState(false);
+  const [variable, setVariable] = useState();
   const [key, setKey] = useState("1");
-  const navigate = useNavigate();
+  const [trendingKey, setTrendingKey] = useState("day");
   const [
     MoviesListHandler,
     { isLoading: moviesListLoading, data: moviesListData, moviesListError },
   ] = useFetchHook({ endpoint: genereIdValue, method: "moviesData" });
+
   const [
     MoviesListHandlerWithParams,
     {
@@ -38,14 +38,49 @@ const Dashboard = () => {
       .find((elem) => elem?.id);
     if (!movieDataId) {
       setMovieDataId(firstMovieObjId?.id);
+    } else if (!variable) {
+      setVariable(moviesListData);
     }
   }, [moviesListData]);
 
   const [
-    Handle,
-    { isLoading: genreLoadingState, data: datagenres, error: genreErrorState },
+    GenreHandle,
+    { isLoading: genreLoading, data: dataGenres, error: genreError },
   ] = useFetchHook({
     endpoint: "https://api.themoviedb.org/3/genre/movie/list",
+    method: "GET",
+  });
+  const [
+    NowPlayingHandle,
+    {
+      isLoading: nowPlayingLoading,
+      data: nowPlayingData,
+      error: nowPlayingError,
+    },
+  ] = useFetchHook({
+    endpoint: "https://api.themoviedb.org/3/movie/now_playing",
+    method: "GET",
+  });
+
+  const [
+    PopularHandle,
+    { isLoading: popularLoading, data: popularData, error: popularError },
+  ] = useLazyFetch({
+    endpoint: "https://api.themoviedb.org/3/movie/popular",
+    method: "GET",
+  });
+  const [
+    TopRatedHandle,
+    { isLoading: topRatedLoading, data: topRatedData, error: topRatedError },
+  ] = useLazyFetch({
+    endpoint: "https://api.themoviedb.org/3/movie/top_rated",
+    method: "GET",
+  });
+  const [
+    UpcomingHandle,
+    { isLoading: upcomingLoading, data: upcomingData, error: upcomingError },
+  ] = useLazyFetch({
+    endpoint: "https://api.themoviedb.org/3/movie/upcoming",
     method: "GET",
   });
 
@@ -64,7 +99,7 @@ const Dashboard = () => {
     method: "GET",
   });
 
-  const conditional = datagenres === undefined ? [] : datagenres;
+  const conditional = dataGenres === undefined ? [] : dataGenres;
   const genreIds = conditional?.genres?.map((item) => {
     const copyObj = { ...item };
     copyObj.value = item.id;
@@ -73,18 +108,24 @@ const Dashboard = () => {
     delete copyObj.name;
     return copyObj;
   });
-
+  const [
+    TrendinglHandle,
+    { isLoading: trendingLoading, data: trendingData, error: trendingError },
+  ] = useFetchHook({
+    endpoint: `https://api.themoviedb.org/3/trending/movie/${trendingKey}`,
+    method: "GET",
+  });
   const filtered = useMemo(() => {
-    return moviesListData?.results?.filter((item) => {
+    return variable?.results?.filter((item) => {
       if (item.id === movieDataId) {
         return item;
       }
     });
-  }, [moviesListData, movieDataId]);
+  }, [variable]);
   const [
     DetailslHandle,
     {
-      isLoading: detailsLoadingState,
+      isLoading: movieDetailsLoading,
       data: movieDetailsData,
       error: movieDetailserror,
     },
@@ -101,226 +142,86 @@ const Dashboard = () => {
     setOpen(false);
   };
 
-  const baseURl = "https://image.tmdb.org/t/p/original/";
-  const duration = moment.duration(movieDetailsData?.runtime, "minutes");
-  const trailerBaseURl = "http://www.youtube.com/watch?v=";
-  const items = [
+  const latestData = [
     {
       key: "1",
-      label: "Overview",
+      label: "Now Playing",
       children: (
         <>
-          <Spin size="large" spinning={detailsLoadingState}>
-            <span className="overview-container">
-              <Row>
-                <Col xl={24}>
-                  <a href="https://www.equalizer.movie" className="title">
-                    {movieDetailsData?.original_title}
-                  </a>
-                  <div className="second-head">
-                    <p className="text">
-                      {moment(movieDetailsData?.release_date).format("DD:MM")}
-                    </p>
-                    <p className="sub-text-1">
-                      {`${duration._data.hours}hr:${duration._data.minutes}m`}
-                    </p>
-                    {movieDetailsData?.genres?.map((elem) => {
-                      return <p className="sub-text-1">{elem?.name}</p>;
-                    })}
-                  </div>
-                  <div className="third-div">
-                    <p className="text">{movieDetailsData?.tagline}</p>
-                    <h1 className="overview-head">Overview</h1>
-                    <p className="text">{movieDetailsData?.overview}</p>
-                  </div>
-                  <Row className="table">
-                    <Col xl={4}>
-                      <h1 className="head">Spoken Languages</h1>
-                    </Col>
-                    <Col xl={1} />
-                    <Col xl={4}>
-                      <h1 className="head">Adult</h1>
-                    </Col>
-                    <Col xl={1} />
-                    <Col xl={4}>
-                      <h1 className="head">Status</h1>
-                    </Col>
-                    <Col xl={1} />
-                    <Col xl={4}>
-                      <h1 className="head">Vote Average</h1>
-                    </Col>
-                    <Col xl={1} />
-                    <Col xl={4}>
-                      <h1 className="head">Vote Count</h1>
-                    </Col>
-                  </Row>
-                  <Row className="table">
-                    <Col xl={4}>
-                      <span style={{ display: "flex" }}>
-                        {movieDetailsData?.spoken_languages?.map((elem) => {
-                          return <h2 className="inner-text">{elem.name}</h2>;
-                        })}
-                      </span>
-                    </Col>
-                    <Col xl={1} />
-                    <Col xl={4}>
-                      <h2 className="inner-text">
-                        {movieDetailsData?.adult === false
-                          ? "Not for Adult"
-                          : "For Adult Also"}
-                      </h2>
-                    </Col>
-                    <Col xl={1} />
-                    <Col xl={4}>
-                      <h2 className="inner-text">{movieDetailsData?.status}</h2>
-                    </Col>
-                    <Col xl={1} />
-                    <Col xl={4}>
-                      <Progress
-                        type="circle"
-                        style={{ width: "10px", height: "10px" }}
-                        percent={movieDetailsData?.vote_average}
-                      />
-                    </Col>
-                    <Col xl={1} />
-                    <Col xl={4}>
-                      <h2 className="inner-text">
-                        {movieDetailsData?.vote_count}
-                      </h2>
-                    </Col>
-                  </Row>
-                  <div className="fourth-div">
-                    <h1 className="head">Production Companies</h1>
-                    <div className="inner-div">
-                      {movieDetailsData?.production_companies?.map((elem) => {
-                        return (
-                          <React.Fragment>
-                            {elem?.logo_path !== null ? (
-                              <>
-                                <img
-                                  src={`${baseURl}${elem?.logo_path}`}
-                                  alt="logo-not-available"
-                                  style={{
-                                    width: "3%",
-                                    height: "40px",
-                                    borderRadius: "100%",
-                                  }}
-                                />
-                              </>
-                            ) : (
-                              <React.Fragment />
-                            )}
-                            <h2>{elem?.origin_country}</h2>
-                            <h2>{elem?.name}</h2>
-                          </React.Fragment>
-                        );
-                      })}
-                    </div>
-                  </div>
-                  {/* <p>{movieDetailsData?.belongs_to_collection?.name}</p>
-            <img
-              src={`${baseURl}${movieDetailsData?.belongs_to_collection.poster_path}`}
-              style={{ width: "100%", height: "40%" }}
-            /> */}
-                </Col>
-              </Row>
-            </span>
+          <Spin size="large" spinning={nowPlayingLoading}>
+            <TypesComp
+              show={show}
+              moviesListData={nowPlayingData}
+              setMovieDataId={setMovieDataId}
+              setVariable={setVariable}
+              setShow={setShow}
+              setKey={setKey}
+            />
           </Spin>
         </>
       ),
     },
     {
       key: "2",
-      label: <p onClick={() => VideosHandle()}>Videos</p>,
+      label: <p>Popular</p>,
       children: (
         <>
-          <Spin size="large" spinning={videosLoadingState}>
-            <Row>
-              <Col xl={24}>
-                <div className="card-main-div">
-                  {videosData?.results !== undefined ? (
-                    <>
-                      {videosData?.results.slice(0, 4).map((elem) => {
-                        return (
-                          <React.Fragment>
-                            <Col xl={6}>
-                              <ReactPlayer
-                                width={350}
-                                height={300}
-                                url={trailerBaseURl + elem.key}
-                                onClick={() => {
-                                  return showModal(), setVideo(true);
-                                }}
-                              />
-                              {video && (
-                                <ModalComp
-                                  title={"PlayTrailer"}
-                                  open={open}
-                                  handleCancel={handleCancel}
-                                  width={1000}
-                                  height={200}
-                                  footer={null}
-                                >
-                                  <ReactPlayer
-                                    width={950}
-                                    height={500}
-                                    url={trailerBaseURl + elem.key}
-                                  />
-                                </ModalComp>
-                              )}
-                            </Col>
-                          </React.Fragment>
-                        );
-                      })}
-                    </>
-                  ) : (
-                    <></>
-                  )}
-                </div>
-              </Col>
-            </Row>
+          <Spin size="large" spinning={popularLoading}>
+            <TypesComp
+              typeString={"popular"}
+              Handler={PopularHandle}
+              show={show}
+              moviesListData={popularData}
+              setMovieDataId={setMovieDataId}
+              setVariable={setVariable}
+              setShow={setShow}
+              setKey={setKey}
+            />
           </Spin>
         </>
       ),
     },
     {
       key: "3",
-      label: <p onClick={() => ImagesHandle()}>Photos</p>,
+      label: <p>Top Rated</p>,
       children: (
         <>
-          <Spin size="large" spinning={imagesLoadingState}>
-            <Row>
-              <Col xl={24}>
-                <div className="card-main-div">
-                  {imagesData?.backdrops !== undefined ? (
-                    <>
-                      {imagesData?.backdrops.slice(0, 4).map((elem) => {
-                        return (
-                          <React.Fragment>
-                            <Col xl={6}>
-                              <div>
-                                <Image
-                                  style={{ width: "90%", height: "90%" }}
-                                  src={`${baseURl}${elem.file_path}`}
-                                />
-                              </div>
-                            </Col>
-                          </React.Fragment>
-                        );
-                      })}
-                    </>
-                  ) : (
-                    <></>
-                  )}
-                </div>
-              </Col>
-            </Row>
+          <Spin size="large" spinning={topRatedLoading}>
+            <TypesComp
+              typeString={"top-rated"}
+              Handler={TopRatedHandle}
+              show={show}
+              moviesListData={topRatedData}
+              setMovieDataId={setMovieDataId}
+              setVariable={setVariable}
+              setShow={setShow}
+              setKey={setKey}
+            />
+          </Spin>
+        </>
+      ),
+    },
+    {
+      key: "4",
+      label: <p>Upcoming</p>,
+      children: (
+        <>
+          <Spin size="large" spinning={upcomingLoading}>
+            <TypesComp
+              typeString={"upcoming"}
+              Handler={UpcomingHandle}
+              show={show}
+              moviesListData={upcomingData}
+              setMovieDataId={setMovieDataId}
+              setVariable={setVariable}
+              setShow={setShow}
+              setKey={setKey}
+            />
           </Spin>
         </>
       ),
     },
   ];
-
   const onChange = (key) => {
     setKey(key);
   };
@@ -332,63 +233,48 @@ const Dashboard = () => {
       .find((elem) => elem?.id);
     if (movieDataId) {
       setMovieDataId(firstMovieObjId?.id);
+    } else {
+      setMovieDataId(0);
+    }
+    setVariable(updatedMovieListData);
+  };
+  
+  const handleChangeSwitch = (checked) => {
+    if (checked === true) {
+      setTrendingKey("day");
+    } else if (checked === false) {
+      setTrendingKey("week");
     }
   };
   useEffect(() => {
     DetailslHandle();
     MoviesListHandler();
   }, [movieDataId]);
+  useEffect(() => {
+    TrendinglHandle();
+  }, [trendingKey]);
+  const objKey1 = {
+    loading: movieDetailsLoading,
+    data: movieDetailsData,
+    setUpdate: setShow,
+  };
+  const objKey2 = {
+    loading: videosLoadingState,
+    data: videosData,
+    setModalUpdate: showModal,
+    setVideoUpdate: setVideo,
+    handle: handleCancel,
+  };
+  const objKey3 = { loading: imagesLoadingState, data: imagesData };
   return (
     <React.Fragment>
       <div className="dashboard-Container">
         <Spin size="large" spinning={moviesListLoading}>
-          <Row style={{ height: "35vh" }}>
-            {filtered !== undefined ? (
-              filtered.map((elem) => {
-                const { title, backdrop_path, overview } = elem;
-                return (
-                  <React.Fragment>
-                    <Col lg={16}>
-                      <div className="mainDivHeader">
-                        <h1 className="mainTitleHeading">{title}</h1>
-                        <h4 className="mainTitleHeading">{overview}</h4>
-                        <Button
-                          type="primary"
-                          onClick={() => {
-                            localStorage.setItem("movieid", elem?.id);
-                            return navigate(`/${elem?.id}/details`, {
-                              state: {
-                                movieDataId: movieDataId,
-                                movieDetailsData:
-                                  movieDetailsData !== undefined
-                                    ? movieDetailsData
-                                    : {},
-                              },
-                            });
-                          }}
-                        >
-                          More Details
-                        </Button>
-                      </div>
-                    </Col>
-                    <Col lg={8}>
-                      <div className="header-img-div">
-                        <img
-                          className="img-fluid header-img"
-                          src={`${baseURl}${backdrop_path}`}
-                          alt="head"
-                        />
-                      </div>
-                    </Col>
-                  </React.Fragment>
-                );
-              })
-            ) : (
-              <React.Fragment>
-                <h2>Fetching Data ....</h2>
-              </React.Fragment>
-            )}
-          </Row>
+          <Header
+            filtered={filtered}
+            movieDetailsData={movieDetailsData}
+            movieDataId={movieDataId}
+          />
           <div className="select-category">
             <Select
               defaultValue="Action"
@@ -401,49 +287,48 @@ const Dashboard = () => {
           </div>
         </Spin>
         <Spin size="large" spinning={moviesListLoadinglazy}>
-          <Row style={{ display: show ? "none" : "flex" }}>
-            <Col xl={24}>
-              <div className="card-main-div">
-                {moviesListData !== undefined ? (
-                  moviesListData?.results?.map((item) => {
-                    const handleChange = () => {
-                      localStorage.setItem("forSameComp",item?.id);
-                      setMovieDataId(item.id);
-                      setShow(true);
-                      setKey("1");
-                    };
-                    return (
-                      <React.Fragment>
-                        <Col xl={3}>
-                          <CardComponent
-                            width={160}
-                            item={item}
-                            handleChange={handleChange}
-                          />
-                        </Col>
-                      </React.Fragment>
-                    );
-                  })
-                ) : (
-                  <React.Fragment>
-                    <h2>No Movies List Data</h2>
-                  </React.Fragment>
-                )}
-              </div>
-            </Col>
-          </Row>
+          <TypesComp
+            show={show}
+            moviesListData={moviesListData}
+            setMovieDataId={setMovieDataId}
+            setVariable={setVariable}
+            setShow={setShow}
+            setKey={setKey}
+          />
         </Spin>
+        <Switch
+          checkedChildren="Day"
+          unCheckedChildren="This Week"
+          loading={trendingLoading}
+          defaultChecked
+          onChange={(checked) => handleChangeSwitch(checked)}
+        />
+        <Spin size="large" spinning={trendingLoading}>
+          <TypesComp
+            show={show}
+            moviesListData={trendingData}
+            setMovieDataId={setMovieDataId}
+            setVariable={setVariable}
+            setShow={setShow}
+            setKey={setKey}
+          />
+        </Spin>
+        <Row style={{ display: show ? "none" : "flex" }}>
+          <Col xl={24}>
+            <Tabs activeKey={key} items={latestData} onChange={onChange} />
+          </Col>
+        </Row>
         <Spin size="large" spinning={moviesListLoading}>
           <Row style={{ display: show ? "flex" : "none" }}>
             <Col xl={4}>
-              <div className="card-main-div">
+              <div className="filtered-main-div">
                 {filtered !== undefined ? (
                   filtered?.map((elem) => {
                     return (
-                      <React.Fragment>
+                      <React.Fragment key={elem.id}>
                         <CardComponent
                           cardComp={"filtered"}
-                          width={200}
+                          width={220}
                           item={elem}
                           handleChange={() => {}}
                         />
@@ -458,10 +343,17 @@ const Dashboard = () => {
               </div>
             </Col>
             <Col xl={19}>
-              <Tabs activeKey={key} items={items} onChange={onChange} />
-              <Button type="primary" onClick={() => setShow(false)}>
-                SideContent
-              </Button>
+              <TabsComp
+                key={key}
+                contentKey={"side-content"}
+                onChange={onchange}
+                objKey1={objKey1}
+                objKey2={objKey2}
+                objKey3={objKey3}
+                video={video}
+                open={open}
+                Handler={{ videosFun: VideosHandle, imagesFun: ImagesHandle }}
+              />
             </Col>
           </Row>
         </Spin>

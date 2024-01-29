@@ -1,10 +1,21 @@
 import React from "react";
 import { Modal } from "antd";
- function ModalComp(props) {
-  const { title, open, handleCancel, width, height, footer, children } = props;
+import "./modal.scss";
+function ModalComp(props) {
+  const {
+    modalString,
+    title,
+    open,
+    handleCancel,
+    width,
+    height,
+    footer,
+    children,
+  } = props;
   return (
     <React.Fragment>
       <Modal
+        className={modalString}
         title={title}
         open={open}
         onCancel={handleCancel}
@@ -17,4 +28,4 @@ import { Modal } from "antd";
     </React.Fragment>
   );
 }
-export {ModalComp};
+export { ModalComp };
