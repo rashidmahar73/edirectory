@@ -4,7 +4,13 @@ import { Select, Row, Col, Spin, Tabs, Switch } from "antd";
 import useFetchHook from "../../utils/useFetch";
 import { useLocation } from "react-router-dom";
 import useLazyFetch from "../../utils/useLazyFetch";
-import { CardComponent, TabsComp, TypesComp, Header } from "../../Components";
+import {
+  CardComponent,
+  TabsComp,
+  TypesComp,
+  Header,
+  SideContent,
+} from "../../Components";
 
 const Dashboard = () => {
   const location = useLocation();
@@ -238,7 +244,7 @@ const Dashboard = () => {
     }
     setVariable(updatedMovieListData);
   };
-  
+
   const handleChangeSwitch = (checked) => {
     if (checked === true) {
       setTrendingKey("day");
@@ -271,7 +277,7 @@ const Dashboard = () => {
       <div className="dashboard-Container">
         <Spin size="large" spinning={moviesListLoading}>
           <Header
-            filtered={filtered}
+            filtered={filtered || []}
             movieDetailsData={movieDetailsData}
             movieDataId={movieDataId}
           />
@@ -289,7 +295,7 @@ const Dashboard = () => {
         <Spin size="large" spinning={moviesListLoadinglazy}>
           <TypesComp
             show={show}
-            moviesListData={moviesListData}
+            moviesListData={moviesListData || {}}
             setMovieDataId={setMovieDataId}
             setVariable={setVariable}
             setShow={setShow}
@@ -300,6 +306,7 @@ const Dashboard = () => {
           checkedChildren="Day"
           unCheckedChildren="This Week"
           loading={trendingLoading}
+          style={{ marginBottom: "15px", marginTop: "15px" }}
           defaultChecked
           onChange={(checked) => handleChangeSwitch(checked)}
         />
@@ -321,26 +328,11 @@ const Dashboard = () => {
         <Spin size="large" spinning={moviesListLoading}>
           <Row style={{ display: show ? "flex" : "none" }}>
             <Col xl={4}>
-              <div className="filtered-main-div">
-                {filtered !== undefined ? (
-                  filtered?.map((elem) => {
-                    return (
-                      <React.Fragment key={elem.id}>
-                        <CardComponent
-                          cardComp={"filtered"}
-                          width={220}
-                          item={elem}
-                          handleChange={() => {}}
-                        />
-                      </React.Fragment>
-                    );
-                  })
-                ) : (
-                  <React.Fragment>
-                    <h2>No Filtered Data</h2>
-                  </React.Fragment>
-                )}
-              </div>
+              <SideContent
+                moviesListLoading={moviesListLoading}
+                filtered={filtered}
+                show={show}
+              />
             </Col>
             <Col xl={19}>
               <TabsComp

@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Row, Col } from "antd";
 import { CardComponent } from "../card";
-import "./styles.scss";
+// import "./styles.scss";
+import styles from "./styles.module.scss";
 function TypesComp(props) {
   const {
     typeString,
@@ -23,40 +24,31 @@ function TypesComp(props) {
     }
   }, []);
   return (
-    <React.Fragment>
-      <Row style={{ display: show ? "none" : "flex" }}>
-        <Col xl={24}>
-          <div className="card-main-div">
-            {moviesListData !== undefined ? (
-              moviesListData?.results?.map((item) => {
-                const handleChange = () => {
-                  setMovieDataId(item.id);
-                  setVariable(moviesListData);
-                  setShow(true);
-                  setKey("1");
-                };
-                return (
-                  <React.Fragment key={item.id}>
-                    <Col xl={2}>
-                      <CardComponent
-                        cardComp={"dashboard"}
-                        width={130}
-                        item={item}
-                        handleChange={handleChange}
-                      />
-                    </Col>
-                  </React.Fragment>
-                );
-              })
-            ) : (
-              <React.Fragment>
-                <h2>No Movies List Data</h2>
-              </React.Fragment>
-            )}
-          </div>
-        </Col>
-      </Row>
-    </React.Fragment>
+    <Fragment>
+      <div className={styles.movieCard} style={{ display: show ? "none" : "flex" }}>
+        <Row style={{ display: show ? "none" : "flex" }}>
+          {moviesListData?.results?.map((item) => {
+            const handleChange = () => {
+              setMovieDataId(item.id);
+              setVariable(moviesListData);
+              setShow(true);
+              setKey("1");
+            };
+            return (
+              <Fragment key={`movie-card-main-div ${item.id}`}>
+                <Col xl={4}>
+                  <CardComponent
+                    width={170}
+                    item={item}
+                    handleChange={handleChange}
+                  />
+                </Col>
+              </Fragment>
+            );
+          })}
+        </Row>
+      </div>
+    </Fragment>
   );
 }
 export { TypesComp };

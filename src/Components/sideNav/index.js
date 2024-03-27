@@ -72,7 +72,7 @@ function SideLayout() {
           <Content style={{ background: "white" }}>
             <Routes>
               <Route
-                path={dashUrl.includes("null") ? "/dashboard" : dashUrl}
+                path={dashUrl.includes("null") ? "/" : dashUrl}
                 element={<Dashboard />}
               />
               <Route
