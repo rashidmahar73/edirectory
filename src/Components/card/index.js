@@ -8,22 +8,12 @@ export function CardComponent(props) {
 
   return (
     <React.Fragment>
-      {/* {item?.profile_path === null || item?.poster_path === null ? (
-        <React.Fragment >
-          sad
-        </React.Fragment>
-      ) : ( */}
       <Card
         hoverable
         style={{
           width: width,
           marginTop: cardComp === "head-card-details" ? "20px" : "0px",
         }}
-        className={`${
-          cardComp === "head-card-details" || cardComp === "dashboard"
-            ? ""
-            : "card-hover"
-        }`}
         onClick={handleChange}
         cover={
           <>

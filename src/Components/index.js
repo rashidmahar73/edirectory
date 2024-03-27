@@ -5,3 +5,5 @@ export * from "./header";
 export * from "./mediaComp";
 export * from "./tabs";
 export * from "./typeComp";
+export * from "./conditionalRenderer";
+export * from "./sideContent";
