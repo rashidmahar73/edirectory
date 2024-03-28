@@ -7,7 +7,7 @@ import { customItems } from "./CustomMenu";
 import { Header } from "antd/es/layout/layout";
 import { MovieDetails } from "../../Pages/details";
 import { Dashboard, Logout } from "../../Pages";
-import { TvSeries } from "../../Pages/tv";
+
 
 function SideLayout() {
   const [selectedKey, setSelectedKey] = useState("/dashboard");
@@ -15,7 +15,6 @@ function SideLayout() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const getid = localStorage.getItem("movieid");
-  console.log(getid,"getid")
   const genreid = localStorage.getItem("genreId");
   const handleSideBar = (key) => {
     if (key) {
@@ -79,7 +78,7 @@ function SideLayout() {
                 path={`/${Number(getid)}/details`}
                 element={<MovieDetails />}
               />
-              <Route path="/tv-series" element={<TvSeries/>}/>
+              {/* <Route path="/tv-series" element={<TvSeries/>}/> */}
             </Routes>
           </Content>
           <Header>

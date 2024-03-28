@@ -3,7 +3,7 @@ import ApiHandlerV2 from "./ApiHandlerV2";
 
 export default function useFetchHook({ method, endpoint }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState([] | {});
+  const [data, setData] = useState(undefined);
   const [error, setError] = useState({});
   useEffect(() => {
     ApiHandler();

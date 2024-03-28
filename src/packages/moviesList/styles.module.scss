@@ -1,4 +1,8 @@
 .movieCard {
   height: 44dvh;
   overflow-y: auto;
+  display: flex;
+}
+.noMovieCard{
+  display: none;
 }
