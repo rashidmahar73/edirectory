@@ -1,0 +1,46 @@
+.headerParent {
+  z-index: 1;
+  position: relative;
+  width: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.content {
+  .scrollingWrapper {
+    width: 100%;
+    display: inline-flex;
+    justify-content: space-between;
+    overflow: auto;
+    overflow-y: hidden;
+    z-index: 1;
+    width: 100%;
+
+    .billedCastBody {
+      display: flex;
+      justify-content: center;
+      align-self: center;
+
+      :global(.ant-card-body) {
+        display: none;
+      }
+
+      .viewMore {
+        border: none;
+        font-weight: 700;
+        display: block;
+      }
+    }
+  }
+
+  .statsLists {
+    margin: 0px;
+    list-style-type: none;
+    line-height: 29px;
+    font-weight: 100;
+  }
+
+  .keyWordsBtn {
+    background-color: lightgray;
+  }
+}

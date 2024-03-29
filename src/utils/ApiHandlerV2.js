@@ -1,5 +1,5 @@
 import axios from "axios";
-import { api_key, moviesdata, tvData } from "../Api's URL/apiUrl";
+import { api_key, moviesdata, tvData } from "./Api's URL/apiUrl";
 
 const ApiHandlerV2 = async ({ method, endpoint }) => {
   if (method === "GET") {
