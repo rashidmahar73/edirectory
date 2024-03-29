@@ -1,11 +1,17 @@
 import React from "react";
+
 import { Col, Row } from "antd";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import { Card } from "../../../Components";
-import { VideoPlayer } from "../../../Components/videoPlayer";
-import { Button } from "../../../Components/button";
-import "./styles.scss";
+
+import {
+  Card,
+  ConditionalRenderer,
+  VideoPlayer,
+  Button,
+} from "../../../Components";
+
+import styles from "./styles.module.scss";
 
 function Header({ movieDetailsData, duration, videosData, crewData }) {
   const navigate = useNavigate();
@@ -17,121 +23,74 @@ function Header({ movieDetailsData, duration, videosData, crewData }) {
     });
   }
   return (
-    <div className="header">
-      <Col xl={3} />
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <Col lg={4} md={8}>
-          <Card isMeta={true} width={250} item={movieDetailsData}>
+    <>
+      <Col xxl={3} xl={1} lg={0} md={0} />
+      <div className={styles.detailsHeader}>
+        <Col xxl={5} xl={6} lg={7} md={7}>
+          <Card
+            isMeta={true}
+            className={styles.detailsHeaderCard}
+            width={265}
+            item={movieDetailsData}
+          >
             <Card.Cover path={movieDetailsData?.poster_path} />
           </Card>
         </Col>
-        <Col lg={14} md={14}>
-          <span
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              height: "42vh",
-              justifyContent: "center",
-            }}
-          >
-            <h1
-              style={{
-                color: "white",
-                fontSize: "2rem",
-                margin: "0px",
-                paddingTop: "10px",
-              }}
-            >
+        <Col xxl={13} xl={17} lg={17} md={17}>
+          <div className={styles.headerContent}>
+            <h1>
               {movieDetailsData?.original_title}{" "}
               {new Date(movieDetailsData.release_date).getFullYear()}
             </h1>
-            <h3
-              style={{
-                color: "white",
-                margin: "0px",
-                paddingTop: "10px",
-              }}
-            >
-              <span style={{ display: "flex", fontWeight: "100" }}>
-                {moment(movieDetailsData?.release_date).format("DD:MM")}
-                <span style={{ paddingLeft: "10px" }}>
-                  {" "}
-                  {`${duration._data.hours} h : ${duration._data.minutes} m`}
-                </span>
-                {movieDetailsData?.genres.map((item) => (
-                  <Button
-                    onClickHandler={() => onClickHandler(item)}
-                    className="genres-btn"
-                    data={item.name}
-                  />
+            <div className={styles.childDiv}>
+              <h3>
+                {moment(movieDetailsData?.release_date).format("DD:MM")}{" "}
+                {`${duration._data.hours} h : ${duration._data.minutes} m`}
+              </h3>
+              {movieDetailsData?.genres.map((item) => (
+                <Button
+                  onClickHandler={() => onClickHandler(item)}
+                  className={styles.genresBtns}
+                >
+                  {item.name}
+                </Button>
+              ))}
+              {videosData?.results
+                .filter((elem) => elem.name === "Official Trailer")
+                .map((elem) => (
+                  <Col xl={6}>
+                    <VideoPlayer data={elem} isModification={true} />
+                  </Col>
                 ))}
-
-                {videosData?.results
-                  .filter((elem) => elem.name === "Official Trailer")
-                  .map((elem) => (
-                    <Col xl={6}>
-                      <VideoPlayer data={elem} isModification={true} />
+            </div>
+            <p className={styles.overViewText}>Overview</p>
+            <p className={styles.overiewDetailText}>
+              {movieDetailsData?.overview}
+            </p>
+            <Row>
+              <ConditionalRenderer condition={!!crewData?.crew}>
+                {crewData?.crew
+                  .filter(
+                    (elem) =>
+                      elem.job === "Characters" ||
+                      elem.job === "Director" ||
+                      (elem.job === "Writer" && elem)
+                  )
+                  ?.map((elem) => (
+                    <Col lg={8} md={8} sm={8}>
+                      <p className={styles.castName}>{elem?.name}</p>
+                      <p className={styles.castTitle}>
+                        <br /> {elem?.job}
+                      </p>
                     </Col>
                   ))}
-              </span>
-              <p style={{ margin: "0px", fontSize: "2rem" }}>Overview</p>
-              <p
-                style={{
-                  lineHeight: "1.9",
-                  margin: "0px",
-                  paddingTop: "10px",
-                  fontWeight: "100",
-                }}
-              >
-                {movieDetailsData?.overview}
-              </p>
-              <Row>
-                {crewData?.crew !== undefined ? (
-                  <>
-                    {crewData.crew
-                      .filter(
-                        (elem) =>
-                          elem.job === "Characters" ||
-                          elem.job === "Director" ||
-                          (elem.job === "Writer" && elem)
-                      )
-                      ?.map((elem) => {
-                        return (
-                          <React.Fragment>
-                            <Col lg={8} md={8} sm={8}>
-                              <p
-                                style={{
-                                  margin: "0px",
-                                  fontSize: "1.3rem",
-                                  paddingTop: "10px",
-                                }}
-                              >
-                                {elem?.name}
-                              </p>
-                              <p
-                                style={{
-                                  margin: "0px",
-                                  fontSize: "15px",
-                                  paddingBottom: "10px",
-                                }}
-                              >
-                                <br /> {elem?.job}
-                              </p>
-                            </Col>
-                          </React.Fragment>
-                        );
-                      })}
-                  </>
-                ) : (
-                  <React.Fragment />
-                )}
-              </Row>
-            </h3>
-          </span>
+              </ConditionalRenderer>
+            </Row>
+          </div>
         </Col>
       </div>
-      <Col xl={3} />
-    </div>
+      <Col xxl={3} xl={0} lg={0} md={0} />
+    </>
   );
 }
 

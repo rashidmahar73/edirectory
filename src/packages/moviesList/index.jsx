@@ -13,7 +13,7 @@ function MoviesList(props) {
     <div className={show ? styles.noMovieCard : styles.movieCard}>
       <Row style={{ display: show ? "none" : "flex" }}>
         {moviesListData?.results?.map((item) => (
-          <Col xl={4} key={`movie-card-main-div ${item.id}`}>
+          <Col xl={3} key={`movie-card-main-div ${item.id}`}>
             <Card
               width={170}
               item={item}

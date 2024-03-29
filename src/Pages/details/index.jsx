@@ -1,10 +1,10 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { useLocation } from "react-router-dom";
-import { Row, Col, Button, Space, Tabs } from "antd";
 
+import { useLocation } from "react-router-dom";
+import { Row, Col, Space, Tabs } from "antd";
 import moment from "moment/moment";
-import useFetchHook from "../../utils/useFetch";
-import { Card } from "../../Components";
+
+import { Card, ConditionalRenderer, Button } from "../../Components";
 import { Header } from "./header";
 import {
   FacebookFilled,
@@ -13,7 +13,13 @@ import {
   ArrowRightOutlined,
   StarFilled,
 } from "@ant-design/icons";
-import "./details.scss";
+
+import useFetchHook from "../../utils/useFetch";
+
+import { baseURL } from "../../utils/constants";
+
+import styles from "./styles.module.scss";
+
 export function MovieDetails() {
   const [key, setKey] = useState("1");
   const [updatedIndex, setUpdatedIndex] = useState(0);
@@ -85,6 +91,29 @@ export function MovieDetails() {
   //   method: "GET",
   // });
   const duration = moment.duration(movieDetailsData?.runtime, "minutes");
+
+  const onChange = (key) => {
+    setKey(key);
+  };
+
+  const listItems = [
+    {
+      title: "Status",
+      value: movieDetailsData?.status,
+    },
+    {
+      title: "Original Language",
+      value: movieDetailsData?.spoken_languages[0]?.name,
+    },
+    {
+      title: "Budget",
+      value: movieDetailsData?.budget,
+    },
+    {
+      title: "Revenue",
+      value: movieDetailsData?.revenue,
+    },
+  ];
   const items = [
     {
       key: "1",
@@ -158,145 +187,106 @@ export function MovieDetails() {
     },
     { key: "2", label: "Discussions", children: "" },
   ];
-  const baseURl = "https://image.tmdb.org/t/p/original/";
-  const onChange = (key) => {
-    setKey(key);
-  };
+
   return (
     <Fragment>
       <Row>
         <Col lg={24} md={24} xl={24}>
-          {movieDetailsData !== undefined ? (
-            <>
-              <React.Fragment>
-                <Row
-                  className="img"
-                  style={{
-                    backgroundImage: `url(${
-                      baseURl + movieDetailsData.backdrop_path
-                    })`,
-                    backgroundPosition: "left calc((50vw - 620px) - 340px) top",
-                    backgroundSize: "cover",
-                    backgroundRepeat: "no-repeat",
-                  }}
-                >
-                  <Header
-                    movieDetailsData={movieDetailsData}
-                    duration={duration}
-                    videosData={videosData}
-                    crewData={crewData}
-                  />
-                </Row>
-              </React.Fragment>
-            </>
-          ) : (
-            <></>
-          )}
+          <ConditionalRenderer condition={!!movieDetailsData}>
+            <Row
+              className={styles.headerParent}
+              style={{
+                backgroundImage: `url(${
+                  baseURL.imageBaseURL + movieDetailsData.backdrop_path
+                })`,
+                // - 340px in calc
+                // backgroundPosition: "left calc((50vw - 1120px) ) top",
+              }}
+            >
+              <Header
+                movieDetailsData={movieDetailsData}
+                duration={duration}
+                videosData={videosData}
+                crewData={crewData}
+              />
+            </Row>
+          </ConditionalRenderer>
         </Col>
       </Row>
-      <Row>
-        <Col lg={1} />
-        <Col lg={3}>
-          <h2>Top Billed Cast</h2>
-        </Col>
-        <Col lg={16} />
-        <Col lg={4}>
-          <Space>
-            <FacebookFilled />
-            <TwitterCircleFilled />
-            <InstagramFilled />
-          </Space>
-        </Col>
-      </Row>
-      <Row>
-        <Col lg={1} />
-        <Col lg={17}>
-          <Row>
-            <Col lg={24}>
-              <div className="scrolling-wrapper">
-                {crewData?.cast !== undefined ? (
-                  <>
-                    {crewData?.cast?.slice(0, 9)?.map((elem) => (
-                      <Col xl={3}>
-                        <Card width={130} item={elem}>
+      <div className={styles.content}>
+        <Row>
+          <Col lg={1} />
+          <Col lg={3}>
+            <h2>Top Billed Cast</h2>
+          </Col>
+          <Col lg={16} />
+          <Col lg={4}>
+            <Space>
+              <FacebookFilled />
+              <TwitterCircleFilled />
+              <InstagramFilled />
+            </Space>
+          </Col>
+        </Row>
+        <Row>
+          <Col lg={1} />
+          <Col lg={17}>
+            <Row>
+              <div className={styles.scrollingWrapper}>
+                <ConditionalRenderer condition={!!crewData?.cast}>
+                  {crewData?.cast?.slice(0, 10)?.map((elem) => (
+                    <ConditionalRenderer
+                      condition={elem?.profile_path !== null}
+                    >
+                      <Col xxl={2} xl={4} lg={5} md={5} sm={5} xs={5}>
+                        <Card item={elem}>
                           <Card.Cover path={elem?.profile_path} />
                         </Card>
                       </Col>
-                    ))}
-                  </>
-                ) : (
-                  <React.Fragment />
-                )}
-                <Card isMeta={true} className="billed-cast-body" width={130}>
+                    </ConditionalRenderer>
+                  ))}
+                </ConditionalRenderer>
+                <Card
+                  isMeta={true}
+                  className={styles.billedCastBody}
+                  width={130}
+                >
                   <Card.Cover isModification>
-                    <Button style={{ border: "none", fontWeight: "700" }} block>
+                    <Button className={styles.viewMore}>
                       View More
                       <ArrowRightOutlined />
                     </Button>
                   </Card.Cover>
                 </Card>
               </div>
-            </Col>
-          </Row>
-          <h2 style={{ margin: "0px", paddingTop: "30px" }}>Social</h2>
-          <Tabs activeKey={key} items={items} onChange={onChange} />
-        </Col>
-        <Col lg={6}>
-          <ul
-            style={{
-              listStyleType: "none",
-              lineHeight: "29px",
-              fontWeight: "10px",
-            }}
-          >
-            {movieDetailsData !== undefined ? (
-              <>
-                <li>
-                  <b>Status</b>
-                </li>
-                <li>{movieDetailsData?.status}</li>
-                <li>
-                  <b>Original Language </b>
-                </li>
-                <li>{movieDetailsData?.spoken_languages[0]?.name}</li>
-                <li>
-                  <b>Budget</b>
-                </li>
-                <li>{movieDetailsData?.budget}</li>
-                <li>
-                  <b>Revenue</b>
-                </li>
-                <li>{movieDetailsData?.revenue}</li>
-              </>
-            ) : (
-              <React.Fragment />
-            )}
-            <li style={{ paddingBottom: "10px" }}>
-              <b>Keywords</b>
-            </li>
-            <div>
-              {keywordsData?.keywords !== undefined ? (
-                <>
-                  {keywordsData?.keywords?.map((elem) => {
-                    return (
-                      <React.Fragment>
-                        <Button
-                          className="keyWordsBtn"
-                          style={{ backgroundColor: "lightgray" }}
-                        >
-                          {elem.name}
-                        </Button>
-                      </React.Fragment>
-                    );
-                  })}
-                </>
-              ) : (
-                <React.Fragment />
-              )}
-            </div>
-          </ul>
-        </Col>
-      </Row>
+            </Row>
+            <h2>Social</h2>
+            <Tabs activeKey={key} items={items} onChange={onChange} />
+          </Col>
+          <Col lg={6}>
+            <ul className={styles.statsLists}>
+              <ConditionalRenderer condition={!!movieDetailsData}>
+                {listItems?.map(({ title, value }) => (
+                  <>
+                    <li>
+                      <b>{title}</b>
+                    </li>
+                    <li>{value}</li>
+                  </>
+                ))}
+              </ConditionalRenderer>
+              <li>
+                <b>Keywords</b>
+              </li>
+              <ConditionalRenderer condition={!!keywordsData?.keywords}>
+                {keywordsData?.keywords?.map((elem) => (
+                  <Button className={styles.keyWordsBtn}>{elem.name}</Button>
+                ))}
+              </ConditionalRenderer>
+            </ul>
+          </Col>
+        </Row>
+      </div>
     </Fragment>
   );
 }

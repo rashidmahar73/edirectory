@@ -3,7 +3,7 @@ import React from "react";
 import { Row, Col, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 
-import { baseURL } from "../../utils/constants";
+import { baseURL } from "../../../utils/constants";
 
 import "./styles.scss";
 
@@ -24,7 +24,7 @@ function Header(props) {
                   height: "35vh",
                 }}
               >
-                <Col lg={16} className="header">
+                <Col lg={12} className="header">
                   <div className="main-div-header">
                     <h1 className="main-title-heading">{title}</h1>
                     <h4 className="main-sub-title-heading">{overview}</h4>
@@ -50,7 +50,7 @@ function Header(props) {
                     </Button>
                   </div>
                 </Col>
-                <Col lg={8}>
+                <Col lg={12}>
                   <div className="header-img-div">
                     <img
                       className="img-fluid header-img"

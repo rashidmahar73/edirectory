@@ -4,8 +4,6 @@ import { Card as AntdCard, Image } from "antd";
 
 import "./card.scss";
 
-
-
 function Card({
   isMeta = false,
   className = "",
@@ -20,12 +18,15 @@ function Card({
       className={className}
       style={{
         width: width,
-        height: "100%",
       }}
       onClick={handleChange}
       cover={children}
     >
-      {isMeta ? <></> : <AntdCard.Meta title={item?.name || item?.title || ""} />}
+      {isMeta ? (
+        <></>
+      ) : (
+        <AntdCard.Meta title={item?.name || item?.title || ""} />
+      )}
     </AntdCard>
   );
 }
@@ -38,29 +39,7 @@ function Cover({ path, isModification, children }) {
       {isModification ? (
         <>{children}</>
       ) : (
-        <>
-          {path === null ? (
-            <div
-              style={{
-                height: "20.5vh",
-                border: "1px solid lightGray",
-                borderTopLeftRadius: "10px",
-                borderTopRightRadius: "10px",
-                display: "flex",
-                alignSelf: "center",
-                justifyContent: "center",
-              }}
-            >
-              <h2 style={{ alignSelf: "center" }}>No image</h2>
-            </div>
-          ) : (
-            <Image
-              loading="lazy"
-              alt="example"
-              src={`${baseURl}${path || ""}`}
-            />
-          )}
-        </>
+        <Image loading="lazy" alt="example" src={`${baseURl}${path || ""}`} />
       )}
     </>
   );

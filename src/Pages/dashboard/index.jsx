@@ -4,7 +4,8 @@ import { useLocation } from "react-router-dom";
 import { Select, Row, Col, Spin, Switch } from "antd";
 
 import { Images, Videos, MovieSideDetail, MoviesList } from "../../packages";
-import { TabsComp, Header, Card } from "../../Components";
+import { TabsComp, Card } from "../../Components";
+import { Header } from "./header";
 
 import { useFetchHook, useLazyFetch } from "../../utils";
 
@@ -145,17 +146,6 @@ const Dashboard = () => {
     method: "GET",
   });
 
-  // Plus above api for budgetrevenue is also
-
-  const handleChangeMovieList = (id) => {
-    setMovieDataId(id);
-    setVariable(moviesListData);
-    setShow(true);
-    setKey("1");
-  };
-
-  const onTabsChange = (currentKey) => setKey(currentKey);
-
   useEffect(() => {
     if (key === "upcoming") {
       UpcomingHandle();
@@ -169,6 +159,26 @@ const Dashboard = () => {
       ImagesHandle();
     }
   }, [key]);
+
+  useEffect(() => {
+    DetailslHandle();
+    MoviesListHandler();
+  }, [movieDataId]);
+
+  useEffect(() => {
+    TrendinglHandle();
+  }, [trendingKey]);
+
+  // Plus above api for budgetrevenue is also
+
+  const handleChangeMovieList = (id) => {
+    setMovieDataId(id);
+    setVariable(moviesListData);
+    setShow(true);
+    setKey("1");
+  };
+
+  const onTabsChange = (currentKey) => setKey(currentKey);
 
   const dashboardTabs = [
     {
@@ -249,15 +259,6 @@ const Dashboard = () => {
     }
   };
 
-  useEffect(() => {
-    DetailslHandle();
-    MoviesListHandler();
-  }, [movieDataId]);
-
-  useEffect(() => {
-    TrendinglHandle();
-  }, [trendingKey]);
-
   const siderTabsList = [
     {
       key: "1",
@@ -294,6 +295,7 @@ const Dashboard = () => {
       ),
     },
   ];
+
   return (
     <div className="dashboard-Container">
       <Spin size="large" spinning={moviesListLoading}>
@@ -351,14 +353,18 @@ const Dashboard = () => {
       {/* in case of single movie */}
       <Spin size="large" spinning={moviesListLoading}>
         <Row style={{ display: show ? "flex" : "none" }}>
-          <Col xl={4}>
+          <Col xxl={4} xl={5} lg={6} md={7} >
             {selectedMovie?.map((elem) => (
-              <Card width={220} item={elem} key={`selectedMovie-card-${elem.id}`}>
+              <Card
+                width={210}
+                item={elem}
+                key={`selectedMovie-card-${elem.id}`}
+              >
                 <Card.Cover path={elem?.poster_path} />
               </Card>
             ))}
           </Col>
-          <Col xl={19}>
+          <Col xxl={20} xl={19} lg={18} md={17} >
             <TabsComp key={key} data={siderTabsList} onChange={onTabsChange} />
           </Col>
         </Row>

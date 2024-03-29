@@ -40,60 +40,38 @@ function MovieSideDetail({ isLoading, data, setShow }) {
               <h1 className="overview-head">Overview</h1>
               <p className="text">{data?.overview}</p>
             </div>
-            <Row className="table">
-              <Col xl={4}>
-                <h1 className="head">Spoken Languages</h1>
-              </Col>
-              <Col xl={1} />
-              <Col xl={4}>
-                <h1 className="head">Adult</h1>
-              </Col>
-              <Col xl={1} />
-              <Col xl={4}>
-                <h1 className="head">Status</h1>
-              </Col>
-              <Col xl={1} />
-              <Col xl={4}>
-                <h1 className="head">Vote Average</h1>
-              </Col>
-              <Col xl={1} />
-              <Col xl={4}>
-                <h1 className="head">Vote Count</h1>
-              </Col>
-            </Row>
-            <Row className="table">
-              <Col xl={4}>
-                <span style={{ display: "flex" }}>
-                  {data?.spoken_languages?.map((elem, index) => (
-                    <h2 className="inner-text" key={index}>
-                      {elem.name}
-                    </h2>
-                  ))}
-                </span>
-              </Col>
-              <Col xl={1} />
-              <Col xl={4}>
-                <h2 className="inner-text">
-                  {data?.adult === false ? "Not for Adult" : "For Adult Also"}
-                </h2>
-              </Col>
-              <Col xl={1} />
-              <Col xl={4}>
-                <h2 className="inner-text">{data?.status}</h2>
-              </Col>
-              <Col xl={1} />
-              <Col xl={4}>
-                <Progress
-                  type="circle"
-                  className="progress-bar"
-                  percent={data?.vote_average}
-                />
-              </Col>
-              <Col xl={1} />
-              <Col xl={4}>
-                <h2 className="inner-text">{data?.vote_count}</h2>
-              </Col>
-            </Row>
+
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <h1 className="head">Spoken Languages</h1>
+              <h1 className="head">Adult</h1>
+              <h1 className="head">Status</h1>
+              <h1 className="head">Vote Average</h1>
+              <h1 className="head">Vote Count</h1>
+            </div>
+
+            <div
+              style={{ display: "flex", justifyContent: "space-between" }}
+              className="table"
+            >
+              <span style={{ display: "flex" }}>
+                {data?.spoken_languages?.map((elem, index) => (
+                  <h2 className="inner-text" key={index}>
+                    {elem.name}
+                  </h2>
+                ))}
+              </span>
+              <h2 className="inner-text">
+                {data?.adult === false ? "Not for Adult" : "For Adult Also"}
+              </h2>
+              <h2 className="inner-text">{data?.status}</h2>
+              <Progress
+                type="circle"
+                className="progress-bar"
+                percent={data?.vote_average}
+              />
+              <h2 className="inner-text">{data?.vote_count}</h2>
+            </div>
+
             <div className="fourth-div">
               <h1 className="head">Production Companies</h1>
               <div className="inner-div">
@@ -104,19 +82,23 @@ function MovieSideDetail({ isLoading, data, setShow }) {
                         <>
                           <img
                             src={`${baseURl}${elem?.logo_path}`}
+                            key={`company-logo-${elem.id}`}
                             alt="logo-not-available"
                             style={{
                               width: "100px",
                               height: "70px",
                               borderRadius: "100%",
+                              marginLeft: "20px",
                             }}
                           />
                         </>
                       ) : (
                         <React.Fragment />
                       )}
-                      <h2>{elem?.origin_country}</h2>
-                      <h2>{elem?.name}</h2>
+                      <h2 style={{ marginLeft: "20px" }}>
+                        {elem?.origin_country}
+                      </h2>
+                      <h2 style={{ marginLeft: "20px" }}>{elem?.name}</h2>
                     </React.Fragment>
                   );
                 })}
