@@ -1,19 +1,16 @@
 import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
-
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Select, Row, Col, Spin, Switch } from "antd";
 
-import { Images, Videos, MovieSideDetail, MoviesList } from "../../packages";
-import { TabsComp, Card } from "../../Components";
-import { Header } from "./header";
+import { Lists, DashboardHeader } from "../../packages";
+import { TabsComp } from "../../Components";
 
-import { useFetchHook, useLazyFetch } from "../../utils";
-
-import "./dashboard.scss";
+import { useFetchHook, useLazyHook } from "../../utils/hooks";
+import styles from "./styles.module.scss";
+import { moviesdata } from "../../utils/api's_URL/apiUrl";
 
 const Dashboard = () => {
   const location = useLocation();
-  const [show, setShow] = useState(false);
   const [genereIdValue, setGenreIdValue] = useState(
     location?.state !== null ? location?.state?.id : 28
   );
@@ -22,10 +19,17 @@ const Dashboard = () => {
   const [key, setKey] = useState("1");
   const [trendingKey, setTrendingKey] = useState("day");
 
+  const navigate = useNavigate();
+// Below Need to set
   const [
     MoviesListHandler,
     { isLoading: moviesListLoading, data: moviesListData, moviesListError },
-  ] = useFetchHook({ endpoint: genereIdValue, method: "moviesData" });
+  ] = useFetchHook({
+    method: "GET",
+    search: genereIdValue,
+    isAbsoluteURL: true,
+    absoluteURL: moviesdata,
+  });
 
   const [
     MoviesListHandlerWithParams,
@@ -34,7 +38,14 @@ const Dashboard = () => {
       data: moviesListDatalazy,
       movieListErrorlazy,
     },
-  ] = useLazyFetch({ endpoint: "", method: "moviesData" });
+  ] = useLazyHook({
+    method: "GET",
+    search: "",
+    isAbsoluteURL: true,
+    absoluteURL: moviesdata,
+  });
+
+  // uptwos
 
   useLayoutEffect(() => {
     const firstMovieObjId = moviesListData?.results
@@ -51,8 +62,8 @@ const Dashboard = () => {
     GenreHandle,
     { isLoading: genreLoading, data: dataGenres, error: genreError },
   ] = useFetchHook({
-    endpoint: "https://api.themoviedb.org/3/genre/movie/list",
     method: "GET",
+    search: "https://api.themoviedb.org/3/genre/movie/list",
   });
 
   const [
@@ -63,76 +74,52 @@ const Dashboard = () => {
       error: nowPlayingError,
     },
   ] = useFetchHook({
-    endpoint: "https://api.themoviedb.org/3/movie/now_playing",
     method: "GET",
+    search: "now_playing",
   });
 
   const [
     PopularHandle,
     { isLoading: popularLoading, data: popularData, error: popularError },
-  ] = useLazyFetch({
-    endpoint: "https://api.themoviedb.org/3/movie/popular",
+  ] = useLazyHook({
     method: "GET",
+    search: "popular",
   });
 
   const [
     TopRatedHandle,
     { isLoading: topRatedLoading, data: topRatedData, error: topRatedError },
-  ] = useLazyFetch({
-    endpoint: "https://api.themoviedb.org/3/movie/top_rated",
+  ] = useLazyHook({
     method: "GET",
+    search: "top_rated",
   });
 
   const [
     UpcomingHandle,
     { isLoading: upcomingLoading, data: upcomingData, error: upcomingError },
-  ] = useLazyFetch({
-    endpoint: "https://api.themoviedb.org/3/movie/upcoming",
+  ] = useLazyHook({
     method: "GET",
+    search: "upcoming",
   });
 
-  const [
-    VideosHandle,
-    { isLoading: videosLoadingState, data: videosData, error: videosError },
-  ] = useLazyFetch({
-    endpoint: `https://api.themoviedb.org/3/movie/${movieDataId}/videos`,
-    method: "GET",
+  const genreIds = dataGenres?.genres?.map((item) => {
+    const copyObj = { ...item };
+    copyObj.value = item.id;
+    copyObj.label = item.name;
+    delete copyObj.id;
+    delete copyObj.name;
+    return copyObj;
   });
-
-  const [
-    ImagesHandle,
-    { isLoading: imagesLoadingState, data: imagesData, error: imagesError },
-  ] = useLazyFetch({
-    endpoint: ` https://api.themoviedb.org/3/movie/${movieDataId}/images`,
-    method: "GET",
-  });
-
-  const genreIds =
-    dataGenres?.genres ||
-    []?.map((item) => {
-      const copyObj = { ...item };
-      copyObj.value = item.id;
-      copyObj.label = item.name;
-      delete copyObj.id;
-      delete copyObj.name;
-      return copyObj;
-    });
 
   const [
     TrendinglHandle,
     { isLoading: trendingLoading, data: trendingData, error: trendingError },
   ] = useFetchHook({
-    endpoint: `https://api.themoviedb.org/3/trending/movie/${trendingKey}`,
     method: "GET",
+    search: trendingKey,
+    absoluteURL: "https://api.themoviedb.org/3/trending/movie",
+    isAbsoluteURL: true,
   });
-
-  const selectedMovie = useMemo(() => {
-    return variable?.results?.filter((item) => {
-      if (item.id === movieDataId) {
-        return item;
-      }
-    });
-  }, [variable]);
 
   const [
     DetailslHandle,
@@ -142,8 +129,8 @@ const Dashboard = () => {
       error: movieDetailserror,
     },
   ] = useFetchHook({
-    endpoint: `https://api.themoviedb.org/3/movie/${movieDataId}`,
     method: "GET",
+    search: movieDataId,
   });
 
   useEffect(() => {
@@ -153,10 +140,6 @@ const Dashboard = () => {
       TopRatedHandle();
     } else if (key === "popular") {
       PopularHandle();
-    } else if (key === "videos") {
-      VideosHandle();
-    } else if (key === "posters") {
-      ImagesHandle();
     }
   }, [key]);
 
@@ -169,13 +152,29 @@ const Dashboard = () => {
     TrendinglHandle();
   }, [trendingKey]);
 
-  // Plus above api for budgetrevenue is also
+  const selectedMovie = useMemo(() => {
+    return variable?.results?.filter((item) => {
+      if (item.id === movieDataId) {
+        return item;
+      }
+    });
+  }, [variable, movieDataId]);
 
-  const handleChangeMovieList = (id) => {
+  const onChangeHandler = (id, movieData) => {
     setMovieDataId(id);
-    setVariable(moviesListData);
-    setShow(true);
-    setKey("1");
+    const filtered = movieData?.filter((item) => {
+      if (item.id === id) {
+        return item;
+      }
+    });
+
+    localStorage.setItem("movieid", id);
+    navigate(`/${id}/detail`, {
+      state: {
+        selectedVideo: filtered || [],
+        videoId: id,
+      },
+    });
   };
 
   const onTabsChange = (currentKey) => setKey(currentKey);
@@ -186,10 +185,9 @@ const Dashboard = () => {
       label: "Now Playing",
       children: (
         <Spin size="large" spinning={nowPlayingLoading}>
-          <MoviesList
-            show={show}
-            moviesListData={nowPlayingData}
-            handleChangeMovieList={handleChangeMovieList}
+          <Lists
+            data={nowPlayingData?.results || []}
+            onChangeHandler={onChangeHandler}
           />
         </Spin>
       ),
@@ -199,10 +197,9 @@ const Dashboard = () => {
       label: <p>Popular</p>,
       children: (
         <Spin size="large" spinning={popularLoading}>
-          <MoviesList
-            show={show}
-            moviesListData={popularData}
-            handleChangeMovieList={handleChangeMovieList}
+          <Lists
+            data={popularData?.results || []}
+            onChangeHandler={onChangeHandler}
           />
         </Spin>
       ),
@@ -212,10 +209,9 @@ const Dashboard = () => {
       label: <p>Top Rated</p>,
       children: (
         <Spin size="large" spinning={topRatedLoading}>
-          <MoviesList
-            show={show}
-            moviesListData={topRatedData}
-            handleChangeMovieList={handleChangeMovieList}
+          <Lists
+            data={topRatedData?.results || []}
+            onChangeHandler={onChangeHandler}
           />
         </Spin>
       ),
@@ -226,10 +222,9 @@ const Dashboard = () => {
       children: (
         <>
           <Spin size="large" spinning={upcomingLoading}>
-            <MoviesList
-              show={show}
-              moviesListData={upcomingData}
-              handleChangeMovieList={handleChangeMovieList}
+            <Lists
+              data={upcomingData?.results || []}
+              onChangeHandler={onChangeHandler}
             />
           </Spin>
         </>
@@ -259,69 +254,30 @@ const Dashboard = () => {
     }
   };
 
-  const siderTabsList = [
-    {
-      key: "1",
-      label: "Overview",
-      children: (
-        <>
-          {" "}
-          <MovieSideDetail
-            isLoading={movieDetailsLoading}
-            data={movieDetailsData}
-            setShow={setShow}
-          />
-        </>
-      ),
-    },
-    {
-      key: "videos",
-      label: <p>Videos</p>,
-      children: (
-        <>
-          {" "}
-          <Videos isLoading={videosLoadingState} data={videosData || {}} />
-        </>
-      ),
-    },
-    {
-      key: "posters",
-      label: <p>Posters</p>,
-      children: (
-        <>
-          {" "}
-          <Images isLoading={imagesLoadingState} data={imagesData || {}} />
-        </>
-      ),
-    },
-  ];
-
   return (
-    <div className="dashboard-Container">
+    <div className={styles.dashboardContainer}>
       <Spin size="large" spinning={moviesListLoading}>
-        <Header
+        <DashboardHeader
           filtered={selectedMovie || []}
-          movieDetailsData={movieDetailsData}
-          movieDataId={movieDataId}
+          data={movieDetailsData}
+          id={movieDataId}
         />
-        <div className="select-category">
+        <div className={styles.selectCategory}>
           <Select
             defaultValue="Action"
             style={{
               width: 120,
-              display: show ? "none" : "block",
             }}
             onChange={(value) => handleGenreChange(value)}
-            options={genreIds}
+            options={genreIds || []}
           />
         </div>
       </Spin>
       {/* first movies sections */}
       <Spin size="large" spinning={moviesListLoadinglazy}>
-        <MoviesList
-          show={show}
-          moviesListData={moviesListData || {}}
-          handleChangeMovieList={handleChangeMovieList}
+        <Lists
+          data={moviesListData?.results || []}
+          onChangeHandler={onChangeHandler}
         />
       </Spin>
       {/* day week Switch case */}
@@ -332,43 +288,22 @@ const Dashboard = () => {
         style={{
           marginBottom: "15px",
           marginTop: "15px",
-          display: show ? "none" : "block",
         }}
         defaultChecked
         onChange={(checked) => handleChangeSwitch(checked)}
       />
       <Spin size="large" spinning={trendingLoading}>
-        <MoviesList
-          show={show}
-          moviesListData={trendingData}
-          handleChangeMovieList={handleChangeMovieList}
+        <Lists
+          data={trendingData?.results || []}
+          onChangeHandler={onChangeHandler}
         />
       </Spin>
       {/* -----day week Switch case */}
-      <Row style={{ display: show ? "none" : "flex" }}>
+      <Row>
         <Col xl={24}>
           <TabsComp key={key} data={dashboardTabs} onChange={onTabsChange} />
         </Col>
       </Row>
-      {/* in case of single movie */}
-      <Spin size="large" spinning={moviesListLoading}>
-        <Row style={{ display: show ? "flex" : "none" }}>
-          <Col xxl={4} xl={5} lg={6} md={7} >
-            {selectedMovie?.map((elem) => (
-              <Card
-                width={210}
-                item={elem}
-                key={`selectedMovie-card-${elem.id}`}
-              >
-                <Card.Cover path={elem?.poster_path} />
-              </Card>
-            ))}
-          </Col>
-          <Col xxl={20} xl={19} lg={18} md={17} >
-            <TabsComp key={key} data={siderTabsList} onChange={onTabsChange} />
-          </Col>
-        </Row>
-      </Spin>
     </div>
   );
 };

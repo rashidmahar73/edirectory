@@ -1,11 +1,11 @@
 import React from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 import { Link } from "react-router-dom";
-import ApiHandler from "../../utils/ApiHandler";
+import { apiHandler } from "../../utils/handlers/apiHandler";
 
  function SignUp() {
   const onFinish = async (values) => {
-   const response= await ApiHandler("GET");
+   const response= await apiHandler("GET");
    localStorage.setItem("token", response.data.request_token);
    window.location.href = `https://www.themoviedb.org/authenticate/${response.data.request_token}?redirect_to=http://localhost:3000/signup`;
   

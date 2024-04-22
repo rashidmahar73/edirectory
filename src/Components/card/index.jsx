@@ -7,6 +7,7 @@ import "./card.scss";
 function Card({
   isMeta = false,
   className = "",
+
   width,
   item = {},
   handleChange = () => {},
@@ -31,7 +32,7 @@ function Card({
   );
 }
 
-function Cover({ path, isModification, children }) {
+function Cover({ path, isModification, children, isPreviewImage = true }) {
   const baseURl = "https://image.tmdb.org/t/p/original/";
 
   return (
@@ -39,7 +40,12 @@ function Cover({ path, isModification, children }) {
       {isModification ? (
         <>{children}</>
       ) : (
-        <Image loading="lazy" alt="example" src={`${baseURl}${path || ""}`} />
+        <Image
+          preview={isPreviewImage}
+          loading="lazy"
+          alt="example"
+          src={`${baseURl}${path || ""}`}
+        />
       )}
     </>
   );

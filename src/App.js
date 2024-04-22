@@ -1,15 +1,15 @@
 import "./App.css";
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
+
 import SideLayout from "./Components/sideNav";
+
+import { BrowserRouter } from "react-router-dom";
 
 function App() {
   return (
-    <>
-      <BrowserRouter>
-        <SideLayout />
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <SideLayout />
+    </BrowserRouter>
   );
 }
 

@@ -1,188 +1,126 @@
 import React, { useState, useEffect, Fragment } from "react";
-
 import { useLocation } from "react-router-dom";
 import { Row, Col, Space, Tabs } from "antd";
 import moment from "moment/moment";
 
 import { Card, ConditionalRenderer, Button } from "../../Components";
-import { Header } from "./header";
+import { DetailsHeader, Reviews } from "../../packages";
 import {
   FacebookFilled,
   TwitterCircleFilled,
   InstagramFilled,
   ArrowRightOutlined,
-  StarFilled,
 } from "@ant-design/icons";
-
-import useFetchHook from "../../utils/useFetch";
-
+import { useFetchHook } from "../../utils/hooks";
 import { baseURL } from "../../utils/constants";
-
 import styles from "./styles.module.scss";
 
 export function MovieDetails() {
   const [key, setKey] = useState("1");
   const [updatedIndex, setUpdatedIndex] = useState(0);
+
   const location = useLocation();
-  const { movieDetailsData, movieDataId } = location?.state;
+  const { videoDetails, videoId } = location?.state;
 
   const [
     VideosHandle,
     { isLoading: videosLoading, data: videosData, error: videosError },
   ] = useFetchHook({
-    endpoint: `https://api.themoviedb.org/3/movie/${movieDataId}/videos`,
     method: "GET",
+    search: `${videoId}/videos`,
   });
   const [
     CastCrewHandle,
     { isLoading: crewIsLoading, data: crewData, error: crewError },
   ] = useFetchHook({
-    endpoint: `https://api.themoviedb.org/3/movie/${movieDataId}/credits`,
     method: "GET",
+    search: `${videoId}/credits`,
   });
   const [
     KeywordsHandle,
     { isLoading: keywordsLoading, data: keywordsData, error: keywordsError },
   ] = useFetchHook({
-    endpoint: `https://api.themoviedb.org/3/movie/${movieDataId}/keywords`,
     method: "GET",
+    search: `${videoId}/keywords`,
   });
   const [
     ReviewsHandle,
     { isLoading: reviewsLoading, data: reviewsData, error: reviewsError },
   ] = useFetchHook({
-    endpoint: `https://api.themoviedb.org/3/movie/${movieDataId}/reviews`,
     method: "GET",
+    search: `${videoId}/reviews`,
   });
+
   useEffect(() => {
     ReviewsHandle();
-    const timerId = setInterval(
-      () => setUpdatedIndex(updatedIndex + 1), // <-- increment index
-      20000
-    );
+    const timerId = setInterval(() => setUpdatedIndex(updatedIndex + 1), 20000);
     return () => clearInterval(timerId);
   }, [updatedIndex]);
+
   // const customImagesVideos = useFetchHook({
-  //   endpoint: `https://api.themoviedb.org/3/movie/${movieDataId}/changes`,
   //   method: "GET",
+  //   search: `${videoId}/changes`,
   // });
 
   //  const customReleaseDatesforallcountry = useFetchHook({
-  //   endpoint: `https://api.themoviedb.org/3/movie/${movieDataId}/release_dates`,
   //   method: "GET",
+  //   search: `${videoId}/release_dates`,
   // });
 
   // const customSimilarMoviesaccordingtoId = useFetchHook({
-  //       endpoint: `https://api.themoviedb.org/3/movie/${movieDataId}/similar `,
   //       method: "GET",
+  //       search: `${videoId}/similar `,
   //     });
+
   // const customWatchProviders = useFetchHook({
-  //           endpoint: `https://api.themoviedb.org/3/movie/${movieDataId}/watch/providers`,
   //           method: "GET",
+  //           search: `${videoId}/watch/providers`,
   //         });
   // const customSearchMovies=axios.get("https://api.themoviedb.org/3/search/movie?query=Sound+of+Freedom&api_key=c12531a82a60035f2bcdef9bb2c8ff3c");
 
   // const customInstagramTwitter = useFetchHook({
-  //   endpoint: `https://api.themoviedb.org/3/movie/${location?.state?.movieDataId}/external_ids`,
   //   method: "GET",
+  //   search: `${location?.state?.videoId}/external_ids`,
   // });
-  // const customLatesMovies = useFetchHook({
-  //   endpoint: `https://api.themoviedb.org/3/movie/latest`,
-  //   method: "GET",
-  // });
-  const duration = moment.duration(movieDetailsData?.runtime, "minutes");
 
-  const onChange = (key) => {
-    setKey(key);
-  };
+  // const customLatesMovies = useFetchHook({
+  //   method: "GET",
+  //   search: `latest`,
+  // });
+
+  const duration = moment.duration(videoDetails?.runtime, "minutes");
+
+  const onChange = (key) => setKey(key);
 
   const listItems = [
     {
       title: "Status",
-      value: movieDetailsData?.status,
+      value: videoDetails?.status,
     },
     {
       title: "Original Language",
-      value: movieDetailsData?.spoken_languages[0]?.name,
+      value: videoDetails?.spoken_languages[0]?.name,
     },
     {
       title: "Budget",
-      value: movieDetailsData?.budget,
+      value: videoDetails?.budget,
     },
     {
       title: "Revenue",
-      value: movieDetailsData?.revenue,
+      value: videoDetails?.revenue,
     },
   ];
+
   const items = [
     {
       key: "1",
       label: "Reviews",
       children: (
-        <>
-          {updatedIndex !== undefined ? (
-            <>
-              {reviewsData?.results !== undefined &&
-              reviewsData?.results.length > 0 ? (
-                <>
-                  {[
-                    reviewsData?.results[
-                      reviewsData?.results !== undefined
-                        ? updatedIndex === reviewsData?.results?.length
-                          ? setUpdatedIndex((updatedIndex) => {
-                              if (updatedIndex) {
-                                return (
-                                  updatedIndex - reviewsData?.results?.length
-                                );
-                              }
-                            })
-                          : updatedIndex
-                        : 0
-                    ],
-                  ]?.map((elem) => {
-                    const stringPart = elem?.content.slice(0, 559);
-                    const date = new Date(elem?.updated_at);
-                    const monthNames = [
-                      "January",
-                      "February",
-                      "March",
-                      "April",
-                      "May",
-                      "June",
-                      "July",
-                      "August",
-                      "September",
-                      "October",
-                      "November",
-                      "December",
-                    ];
-                    const year = date.getFullYear();
-                    const datee = date.getDate();
-                    const month = monthNames[date.getMonth()];
-                    return (
-                      <React.Fragment>
-                        <div style={{ height: "13vh" }}>
-                          <p style={{ margin: "0px" }}>
-                            A review by {elem?.author} <StarFilled />{" "}
-                            {elem?.author_details.rating} written by{" "}
-                            {elem?.author} on {month} {datee} ,{year}
-                            {stringPart} <a>Read More</a>
-                          </p>
-                        </div>
-                      </React.Fragment>
-                    );
-                  })}
-                </>
-              ) : (
-                <React.Fragment>
-                  <h1>There is no Reviews</h1>
-                </React.Fragment>
-              )}
-            </>
-          ) : (
-            <React.Fragment />
-          )}
-        </>
+        <Reviews
+          updatedIndex={updatedIndex}
+          setUpdatedIndex={setUpdatedIndex}
+          reviewsData={reviewsData}
+        />
       ),
     },
     { key: "2", label: "Discussions", children: "" },
@@ -192,19 +130,17 @@ export function MovieDetails() {
     <Fragment>
       <Row>
         <Col lg={24} md={24} xl={24}>
-          <ConditionalRenderer condition={!!movieDetailsData}>
+          <ConditionalRenderer condition={!!videoDetails}>
             <Row
               className={styles.headerParent}
               style={{
                 backgroundImage: `url(${
-                  baseURL.imageBaseURL + movieDetailsData.backdrop_path
+                  baseURL.imageBaseURL + videoDetails.backdrop_path
                 })`,
-                // - 340px in calc
-                // backgroundPosition: "left calc((50vw - 1120px) ) top",
               }}
             >
-              <Header
-                movieDetailsData={movieDetailsData}
+              <DetailsHeader
+                data={videoDetails}
                 duration={duration}
                 videosData={videosData}
                 crewData={crewData}
@@ -265,7 +201,7 @@ export function MovieDetails() {
           </Col>
           <Col lg={6}>
             <ul className={styles.statsLists}>
-              <ConditionalRenderer condition={!!movieDetailsData}>
+              <ConditionalRenderer condition={!!videoDetails}>
                 {listItems?.map(({ title, value }) => (
                   <>
                     <li>

@@ -7,7 +7,7 @@ import { customItems } from "./CustomMenu";
 import { Header } from "antd/es/layout/layout";
 import { MovieDetails } from "../../Pages/details";
 import { Dashboard, Logout } from "../../Pages";
-
+import { ShortView } from "../../Pages/shortView";
 
 function SideLayout() {
   const [selectedKey, setSelectedKey] = useState("/dashboard");
@@ -42,9 +42,10 @@ function SideLayout() {
       window.removeEventListener("popstate", handlePopstate);
     };
   }, [pathname]);
+
   const dashUrl =
     typeof genreid === null ? "/dashboard" : `/dashboard/${genreid}`;
-  
+
   return (
     <>
       {/* {isAuthenticated?( */}
@@ -78,175 +79,19 @@ function SideLayout() {
                 path={`/${Number(getid)}/details`}
                 element={<MovieDetails />}
               />
-              {/* <Route path="/tv-series" element={<TvSeries/>}/> */}
+              <Route
+                path={`/${getid}/detail`}
+                element={<ShortView />}
+              />
             </Routes>
           </Content>
-          <Header>
+          {/* <Header>
             <Logout />
-          </Header>
+          </Header> */}
         </Layout>
       </Layout>
-
-      {/* ):(
-      <Routes>
-      <Route path="/login" element={<Login />}></Route>
-      <Route path="/Signup" element={<SignUp />}></Route>
-    </Routes>
-    )} */}
     </>
   );
 }
 
 export default SideLayout;
-
-// {
-/* <Routes>
-    <Route path="/" element={<Login />} />
-    <Route
-      path="/countryUser"
-      element={
-        <ProtectedRoute>
-          <CountryUsers />
-        </ProtectedRoute>
-      }
-    />
-    <Route
-      path="/revenue"
-      element={
-        <ProtectedRoute>
-          <Revenue />
-        </ProtectedRoute>
-      }
-    />
-    <Route
-      path="/blockedUsers"
-      element={
-        <ProtectedRoute>
-          <BlockedUsers />
-        </ProtectedRoute>
-      }
-    />
-    <Route
-      path="/payments"
-      element={
-        <ProtectedRoute>
-          <PaymentHistory />
-        </ProtectedRoute>
-      }
-    />
-    <Route
-      path="/serverDashboard"
-      element={
-        <ProtectedRoute>
-          <ServerDashboard />
-        </ProtectedRoute>
-      }
-    />
-    <Route
-      path="/dashboard"
-      element={
-        <ProtectedRoute>
-          <Dashboard />
-        </ProtectedRoute>
-      }
-    />
-  </Routes> */
-// }
-// {
-/* </BrowserRouter> */
-// }
-//
-// let token = localStorage.getItem("token");
-//   return (
-//     <Router>
-//       {!token ? (
-//         <>
-//           <Routes>
-//             <Route path="/" element={<Navigate to="/sign-up" replace />} />
-//             <Route path="sign-up" element={<Register />} />
-//             <Route path="login" element={<Login />} />
-//             <Route path="verify/:userId/:token" element={<CodeConfirmation />} />
-//           </Routes>
-//         </>
-//       ) : (
-//         <DefaultLayout />
-//       )}
-//     </Router>
-//   );
-
-// {
-/* mycode using react usecontext authProvider Function for protected routes */
-// }
-// {
-/* <AuthProvider>
-    <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Login/>} />
-      <Route path="/dashboard" element={<RequireAuth><Dashboard/></RequireAuth>} />
-    </Routes>
-    </BrowserRouter>
-    </AuthProvider> */
-// }
-// {
-/* mycode using react usecontext authProvider Function for protected routes */
-// }
-
-// {
-/* <BrowserRouter> */
-// }
-// {
-/* <ProtectedRoute>
-          <Dashboard/>
-        </ProtectedRoute>
-        <Routes>
-          <Route path="/" element={<Navigate to="/Login" replace />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path ='/dashboard'element={<Navigate to="/Login" replace/>}/>
-    
-        </Routes> */
-// }
-// {
-/* MyCode for Routes */
-// }
-// {
-/* {token ? (
-        <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
-      ) : (
-        <Routes>
-          <Route path="/" element={<Navigate to="/Login" replace />} />
-          <Route path="/Login" element={<Login />} />
-          <Route
-            path="/dashboard"
-            element={<Navigate to="/Login" replace />}
-          />
-        </Routes>
-      )}
-    </BrowserRouter> */
-// }
-// {
-/* MyCodeFor Protected Routes */
-// }
-// {
-/* <Router /> */
-// }
-
-// {
-//   /* Set up your routes using react-router-dom */
-// }
-// {
-//   /* <Routes>
-//               <Route path="/dashboard" element={<div>Dashboard</div>} />
-//               <Route path="/serverDashboard" element={<div>serverDashboard</div>} />
-//               <Route path="/uploads" element={<div>uploads</div>} />
-//             </Routes> */
-// }
-// {
-//   /* data */
-// }
-
-// // const handleLogout = () => {
-// //   localStorage.removeItem("token");
-// //   navigate("/");
-// // };
