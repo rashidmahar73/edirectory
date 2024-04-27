@@ -29,6 +29,10 @@ function Lists(props) {
         {data?.map((item, index) => (
           <Col
             xl={4}
+            lg={4}
+            md={4}
+            sm={4}
+            xs={10}
             key={`card-main-div ${item.id}`}
             style={{
               display:
@@ -55,7 +59,7 @@ function Lists(props) {
 function Container({ children, onClickHandler }) {
   return (
     <Row>
-      <Col xl={2}>
+      <Col xl={2} lg={2} md={2} sm={2} xs={24}>
         <div
           className={styles.btnsClass}
           onClick={() => onClickHandler("previous")}
@@ -63,8 +67,8 @@ function Container({ children, onClickHandler }) {
           <SlidePreviousIcon />
         </div>
       </Col>
-      <Col xl={20}>{children}</Col>
-      <Col xl={2}>
+      <Col xl={20} lg={20} md={20} sm={20} xs={24}>{children}</Col>
+      <Col xl={2} lg={2} md={2} sm={2} xs={24}>
         <div
           className={styles.btnsClass}
           onClick={() => onClickHandler("next")}

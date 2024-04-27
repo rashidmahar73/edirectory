@@ -12,7 +12,6 @@ function ShortView() {
 
   const { selectedVideo, videoId } = location.state;
 
-
   const [
     DetailslHandle,
     {
@@ -24,7 +23,7 @@ function ShortView() {
     method: "GET",
     search: videoId,
   });
- 
+
   const [
     VideosHandle,
     { isLoading: videosLoadingState, data: videosData, error: videosError },
@@ -87,8 +86,6 @@ function ShortView() {
     },
   ];
 
-
-
   return (
     <>
       <Header
@@ -99,12 +96,12 @@ function ShortView() {
       <Row>
         <Col xxl={4} xl={3} lg={6} md={7}>
           {selectedVideo?.map((elem) => (
-            <Card item={elem} key={`card-${elem.id}`}>
+            <Card item={elem} key={`card-${elem.id}`} isMeta>
               <Card.Cover path={elem?.poster_path} />
             </Card>
           ))}
         </Col>
-        <Col xl={1}/>
+        <Col xl={1} />
         <Col xxl={20} xl={20} lg={18} md={17}>
           <Tabs items={siderTabsList} onChange={onTabsChange} />
         </Col>

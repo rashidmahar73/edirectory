@@ -2,16 +2,16 @@ import React from "react";
 
 import { Row, Col, Spin } from "antd";
 
-import { VideoPlayer } from "../../Components/videoPlayer";
+import { VideoPlayer } from "../../Components";
 
-import "./styles.scss";
+import styles from "./styles.module.scss";
 
 function Videos({ isLoading, data }) {
   return (
     <Spin size="large" spinning={isLoading}>
       <Row>
         <Col xl={24}>
-          <div className="videos-main-div">
+          <div className={styles.videoDiv}>
             {data?.results?.slice(0, 4).map((elem) => (
               <Col xl={6}>
                 <VideoPlayer data={elem} />

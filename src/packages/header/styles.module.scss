@@ -1,7 +1,7 @@
 .headerContainer {
   z-index: 1;
   background-size: cover;
-
+  margin-bottom: 20px;
   .headerChild {
     height: 39dvh;
     display: flex;
@@ -24,7 +24,6 @@
       color: white;
       font-size: 1rem;
       font-weight: 500;
-      padding-bottom: 50px;
     }
     .moreDetailsBtn {
       background: linear-gradient(
