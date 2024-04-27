@@ -1,0 +1,54 @@
+.headerContainer {
+  z-index: 1;
+  background-size: cover;
+
+  .headerChild {
+    height: 39dvh;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: start;
+    padding: 0px 20px;
+    background: linear-gradient(
+      to left,
+      rgba(31.5, 31.5, 31.5, 1) calc((50vw - 170px) - 340px),
+      rgba(31.5, 31.5, 31.5, 0.84) 50%,
+      rgba(31.5, 31.5, 31.5, 0.84) 50%
+    ) !important;
+    .heading {
+      color: white;
+      font-size: 1.5rem;
+    }
+    .text {
+      margin: 0px;
+      color: white;
+      font-size: 1rem;
+      font-weight: 500;
+      padding-bottom: 50px;
+    }
+    .moreDetailsBtn {
+      background: linear-gradient(
+        to right,
+        rgb(230, 226, 226),
+        rgba(255, 122, 89, 0)
+      );
+      color: white;
+      font-weight: 700;
+    }
+  }
+}
+.headerImgDiv {
+  width: 100%;
+  max-height: 100%;
+  min-height: 100%;
+  display: flex;
+  justify-content: flex-end;
+
+  .headerImg {
+    width: 100%;
+    position: absolute;
+    min-height: 100%;
+    max-height: 100%;
+    border-radius: 2%;
+  }
+}

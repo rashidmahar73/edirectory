@@ -22,6 +22,8 @@ export function MovieDetails() {
   const location = useLocation();
   const { videoDetails, videoId } = location?.state;
 
+
+
   const [
     VideosHandle,
     { isLoading: videosLoading, data: videosData, error: videosError },

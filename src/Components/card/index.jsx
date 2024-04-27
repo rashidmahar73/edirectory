@@ -7,11 +7,39 @@ import "./card.scss";
 function Card({
   isMeta = false,
   className = "",
-
   width,
   item = {},
   handleChange = () => {},
   children,
+}) {
+  if (isMeta)
+    return (
+      <CardWrapper
+        className={className}
+        width={width}
+        handleChange={handleChange}
+        coverChildren={children}
+      >
+        <AntdCard.Meta title={item?.name || item?.title || ""} />
+      </CardWrapper>
+    );
+
+  return (
+    <CardWrapper
+      className={className}
+      width={width}
+      handleChange={handleChange}
+      coverChildren={children}
+    />
+  );
+}
+
+function CardWrapper({
+  children,
+  className,
+  width,
+  handleChange,
+  coverChildren,
 }) {
   return (
     <AntdCard
@@ -21,13 +49,9 @@ function Card({
         width: width,
       }}
       onClick={handleChange}
-      cover={children}
+      cover={coverChildren}
     >
-      {isMeta ? (
-        <></>
-      ) : (
-        <AntdCard.Meta title={item?.name || item?.title || ""} />
-      )}
+      {children}
     </AntdCard>
   );
 }
@@ -35,19 +59,15 @@ function Card({
 function Cover({ path, isModification, children, isPreviewImage = true }) {
   const baseURl = "https://image.tmdb.org/t/p/original/";
 
+  if (isModification) return <>{children}</>;
+
   return (
-    <>
-      {isModification ? (
-        <>{children}</>
-      ) : (
-        <Image
-          preview={isPreviewImage}
-          loading="lazy"
-          alt="example"
-          src={`${baseURl}${path || ""}`}
-        />
-      )}
-    </>
+    <Image
+      preview={isPreviewImage}
+      loading="lazy"
+      alt="example"
+      src={`${baseURl}${path || ""}`}
+    />
   );
 }
 

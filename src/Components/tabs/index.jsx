@@ -1,10 +1,13 @@
 import React from "react";
+import { Tabs as AntdTabs } from "antd";
 
-import { Tabs } from "antd";
-
-import "./styles.scss";
-
-function TabsComp({ key, data, onChange }) {
-  return <Tabs activeKey={key} items={data} onChange={onChange} />;
+function Tabs({ items, onChange }) {
+  return (
+    <AntdTabs
+      defaultActiveKey="1"
+      items={items}
+      onChange={(value) => onChange(value)}
+    />
+  );
 }
-export { TabsComp };
+export { Tabs };

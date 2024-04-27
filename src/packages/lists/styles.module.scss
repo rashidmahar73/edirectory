@@ -1,12 +1,12 @@
 .listsCard {
-  transition: transform 0.2s;
+  transition: transform 0.4s;
 
   &:hover {
-    -ms-transform: scale(1.5);
+    -ms-transform: scale(1.2);
     /* IE 9 */
-    -webkit-transform: scale(1.5);
+    -webkit-transform: scale(1.2);
     /* Safari 3-8 */
-    transform: scale(1.5);
+    transform: scale(1.2);
     z-index: 1000;
   }
 }
@@ -17,4 +17,14 @@
 
 .btnsClass {
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  align-items: center;
+  svg{
+    
+    path{
+      fill:#006ab3
+    }
+  }
 }

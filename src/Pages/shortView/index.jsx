@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Col, Row } from "antd";
 
-import { Card, TabsComp } from "../../Components";
-import { DashboardHeader, Images, SideDetail, Videos } from "../../packages";
+import { Card, Tabs } from "../../Components";
+import { Header, Images, SideDetail, Videos } from "../../packages";
 import { useLazyHook, useFetchHook } from "../../utils/hooks";
 
 function ShortView() {
@@ -11,6 +11,7 @@ function ShortView() {
   const location = useLocation();
 
   const { selectedVideo, videoId } = location.state;
+
 
   const [
     DetailslHandle,
@@ -23,7 +24,7 @@ function ShortView() {
     method: "GET",
     search: videoId,
   });
-
+ 
   const [
     VideosHandle,
     { isLoading: videosLoadingState, data: videosData, error: videosError },
@@ -86,23 +87,26 @@ function ShortView() {
     },
   ];
 
+
+
   return (
     <>
-      <DashboardHeader
-        filtered={selectedVideo || []}
+      <Header
+        selected={selectedVideo || []}
         data={videoDetailsData}
         id={videoId}
       />
       <Row>
-        <Col xxl={4} xl={5} lg={6} md={7}>
+        <Col xxl={4} xl={3} lg={6} md={7}>
           {selectedVideo?.map((elem) => (
-            <Card width={250} item={elem} key={`selectedMovie-card-${elem.id}`}>
+            <Card item={elem} key={`card-${elem.id}`}>
               <Card.Cover path={elem?.poster_path} />
             </Card>
           ))}
         </Col>
-        <Col xxl={20} xl={19} lg={18} md={17}>
-          <TabsComp key={key} data={siderTabsList} onChange={onTabsChange} />
+        <Col xl={1}/>
+        <Col xxl={20} xl={20} lg={18} md={17}>
+          <Tabs items={siderTabsList} onChange={onTabsChange} />
         </Col>
       </Row>
     </>

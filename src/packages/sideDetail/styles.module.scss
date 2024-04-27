@@ -1,0 +1,64 @@
+.title {
+  font-size: 1.5rem;
+  color: black;
+  font-weight: 700;
+  &:hover {
+    color: black;
+  }
+}
+.secondHead {
+  display: flex;
+  .text {
+    font-size: 1rem;
+  }
+  .subText {
+    padding-left: 10px;
+    font-size: 1rem;
+    margin: 0px;
+  }
+}
+.thirdDiv {
+  .text {
+    font-size: 1rem;
+    margin: 0px;
+  }
+  .overviewHeading {
+    font-size: 1.5rem;
+    color: black;
+    font-weight: 700;
+    margin: 0px;
+  }
+}
+
+.head {
+  font-size: 1.1rem;
+  color: black;
+  font-weight: 700;
+  margin: 0px;
+}
+.innerText {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0px;
+}
+.innerText:not(:first-child) {
+  padding-left: 10px;
+}
+.progressBar {
+  :global(.ant-progress-inner) {
+    width: 50px !important;
+    height: 50px !important;
+    font-size: 12px !important;
+  }
+}
+.fourth-div {
+  .head {
+    font-size: 1.5rem;
+    color: black;
+    font-weight: 700;
+    margin: 0px;
+  }
+  .inner-div {
+    display: flex;
+  }
+}

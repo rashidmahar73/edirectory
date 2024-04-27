@@ -2,12 +2,13 @@ import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Select, Row, Col, Spin, Switch } from "antd";
 
-import { Lists, DashboardHeader } from "../../packages";
-import { TabsComp } from "../../Components";
+import { Lists, Header } from "../../packages";
+import { Tabs } from "../../Components";
 
 import { useFetchHook, useLazyHook } from "../../utils/hooks";
-import styles from "./styles.module.scss";
 import { moviesdata } from "../../utils/api's_URL/apiUrl";
+
+import styles from "./styles.module.scss";
 
 const Dashboard = () => {
   const location = useLocation();
@@ -20,7 +21,7 @@ const Dashboard = () => {
   const [trendingKey, setTrendingKey] = useState("day");
 
   const navigate = useNavigate();
-// Below Need to set
+  // Below Need to set
   const [
     MoviesListHandler,
     { isLoading: moviesListLoading, data: moviesListData, moviesListError },
@@ -176,9 +177,6 @@ const Dashboard = () => {
       },
     });
   };
-
-  const onTabsChange = (currentKey) => setKey(currentKey);
-
   const dashboardTabs = [
     {
       key: "nowPlaying",
@@ -232,6 +230,8 @@ const Dashboard = () => {
     },
   ];
 
+  const onTabsChange = (currentKey) => setKey(currentKey);
+
   const handleGenreChange = async (value) => {
     setGenreIdValue(value);
     const updatedMovieListData = await MoviesListHandlerWithParams(value);
@@ -257,11 +257,12 @@ const Dashboard = () => {
   return (
     <div className={styles.dashboardContainer}>
       <Spin size="large" spinning={moviesListLoading}>
-        <DashboardHeader
-          filtered={selectedMovie || []}
+        <Header
+          selected={selectedMovie || []}
           data={movieDetailsData}
           id={movieDataId}
         />
+
         <div className={styles.selectCategory}>
           <Select
             defaultValue="Action"
@@ -274,6 +275,7 @@ const Dashboard = () => {
         </div>
       </Spin>
       {/* first movies sections */}
+
       <Spin size="large" spinning={moviesListLoadinglazy}>
         <Lists
           data={moviesListData?.results || []}
@@ -281,6 +283,7 @@ const Dashboard = () => {
         />
       </Spin>
       {/* day week Switch case */}
+
       <Switch
         checkedChildren="Day"
         unCheckedChildren="This Week"
@@ -292,16 +295,17 @@ const Dashboard = () => {
         defaultChecked
         onChange={(checked) => handleChangeSwitch(checked)}
       />
+
       <Spin size="large" spinning={trendingLoading}>
         <Lists
           data={trendingData?.results || []}
           onChangeHandler={onChangeHandler}
         />
       </Spin>
-      {/* -----day week Switch case */}
+
       <Row>
         <Col xl={24}>
-          <TabsComp key={key} data={dashboardTabs} onChange={onTabsChange} />
+          <Tabs items={dashboardTabs} onChange={onTabsChange} />
         </Col>
       </Row>
     </div>
