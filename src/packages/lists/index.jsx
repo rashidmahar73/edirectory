@@ -59,7 +59,7 @@ function Lists(props) {
 function Container({ children, onClickHandler }) {
   return (
     <Row>
-      <Col xl={2} lg={2} md={2} sm={2} xs={24}>
+      <Col xl={1} lg={1} md={1} sm={1} xs={24}>
         <div
           className={styles.btnsClass}
           onClick={() => onClickHandler("previous")}
@@ -67,8 +67,11 @@ function Container({ children, onClickHandler }) {
           <SlidePreviousIcon />
         </div>
       </Col>
-      <Col xl={20} lg={20} md={20} sm={20} xs={24}>{children}</Col>
-      <Col xl={2} lg={2} md={2} sm={2} xs={24}>
+      <Col xl={22} lg={22} md={22} sm={22} xs={24}>
+        {" "}
+        <div style={{ height: "301px" }}>{children}</div>
+      </Col>
+      <Col xl={1} lg={1} md={1} sm={1} xs={24}>
         <div
           className={styles.btnsClass}
           onClick={() => onClickHandler("next")}

@@ -27,8 +27,8 @@ function VideoPlayer({ data }) {
 
   return (
     <>
-      <h5> {data?.name}</h5>
-      <Button onClickHandler={() => handleModal(false)}>View</Button>
+      {/* <h5> {data?.name}</h5> */}
+      <Button style={{marginLeft:"10px"}} onClickHandler={() => handleModal(false)}>Play Trailer</Button>
 
       {video && (
         <ModalComp

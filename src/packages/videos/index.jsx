@@ -7,6 +7,7 @@ import { VideoPlayer } from "../../Components";
 import styles from "./styles.module.scss";
 
 function Videos({ isLoading, data }) {
+
   return (
     <Spin size="large" spinning={isLoading}>
       <Row>

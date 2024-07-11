@@ -4,10 +4,9 @@ import "./sideLayout.scss";
 // import ProtectedRoute from "../../utils/Protected";
 import { Layout, Menu } from "antd";
 import { customItems } from "./CustomMenu";
-import { Header } from "antd/es/layout/layout";
 import { MovieDetails } from "../../Pages/details";
-import { Dashboard, Logout } from "../../Pages";
-import { ShortView } from "../../Pages/shortView";
+import { Dashboard } from "../../Pages";
+import { Overview } from "../../Pages/overview";
 
 function SideLayout() {
   const [selectedKey, setSelectedKey] = useState("/dashboard");
@@ -80,8 +79,8 @@ function SideLayout() {
                 element={<MovieDetails />}
               />
               <Route
-                path={`/${getid}/detail`}
-                element={<ShortView />}
+                path={`/${getid}/overview`}
+                element={<Overview />}
               />
             </Routes>
           </Content>

@@ -11,9 +11,11 @@ export default function useFetchHook({
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState(undefined);
   const [error, setError] = useState({});
+  
   useEffect(() => {
     getData();
   }, []);
+  
   async function getData() {
     try {
       setIsLoading(true);
@@ -23,7 +25,7 @@ export default function useFetchHook({
         isAbsoluteURL,
         absoluteURL,
       });
-      const condition = data === undefined ? [] : data;
+      const condition = data || [];
       setData(condition);
 
       return data;

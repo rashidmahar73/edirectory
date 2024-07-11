@@ -7,6 +7,8 @@ async function apiHandler({ method, search, isAbsoluteURL, absoluteURL }) {
     ? absoluteURL
     : "https://api.themoviedb.org/3/movie";
 
+    console.log()
+
   if (method === "GET") {
     try {
       const response = await axios.get(`${url}/${search}?api_key=${api_key}`);
@@ -24,6 +26,14 @@ async function apiHandler({ method, search, isAbsoluteURL, absoluteURL }) {
   } else if (method === "tvData") {
     try {
       const response = await axios.get(`${tvData}=${search}`);
+      if (response) {
+        return response;
+      }
+    } catch (error) {}
+  }
+  else if (method === "genreList") {
+    try {
+      const response = await axios.get(`${url}?api_key=${api_key}`);
       if (response) {
         return response;
       }

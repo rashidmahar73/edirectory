@@ -1,9 +1,9 @@
-import React, { Fragment } from "react";
+import React from "react";
 
 import { Row, Col } from "antd";
 import { useNavigate } from "react-router-dom";
 
-import { Button } from "../../Components";
+import { Button, ConditionalRenderer } from "../../Components";
 import { baseURL } from "../../utils/constants";
 
 import styles from "./styles.module.scss";
@@ -11,7 +11,7 @@ import styles from "./styles.module.scss";
 function Header(props) {
   const navigate = useNavigate();
 
-  const { selected, data, id } = props;
+  const { selected, data, id, isMoreDetails = false } = props;
 
   function clickHandler() {
     localStorage.setItem("movieid", id);
@@ -24,30 +24,35 @@ function Header(props) {
   }
 
   return (
-    <Fragment>
-      {selected?.map(({ title, backdrop_path, overview }) => (
-        <Row
-          className={styles.headerContainer}
-          style={{
-            backgroundImage: `url(${baseURL.imageBaseURL + backdrop_path})`,
-          }}
-        >
-          <Col lg={24}>
-            <div className={styles.headerChild}>
-              <h1 className={styles.heading}>{title}</h1>
-              <h4 className={styles.text}>{overview?.slice(0, 148)}</h4>
-              <Button
-                className={styles.moreDetailsBtn}
-                onClickHandler={clickHandler}
-              >
-                {" "}
-                More Details
-              </Button>
+    <Row>
+      <Col lg={24}>
+        <div className={styles.header}>
+          {selected?.map(({ title, backdrop_path, overview }) => (
+            <div
+              className={styles.headerContainer}
+              style={{
+                backgroundImage: `url(${baseURL.imageBaseURL + backdrop_path})`,
+              }}
+            >
+              <div className={styles.headerChild}>
+                <h1 className={styles.heading}>{title}</h1>
+                <h4 className={styles.text}>{overview?.slice(0, 148)}</h4>
+                <ConditionalRenderer condition={isMoreDetails}>
+                <Button
+                  className={styles.moreDetailsBtn}
+                  onClickHandler={clickHandler}
+                >
+                  {" "}
+                  More Details
+                </Button>
+
+                </ConditionalRenderer>
+              </div>
             </div>
-          </Col>
-        </Row>
-      ))}
-    </Fragment>
+          ))}
+        </div>
+      </Col>
+    </Row>
   );
 }
 export { Header };

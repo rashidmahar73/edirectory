@@ -22,8 +22,6 @@ export function MovieDetails() {
   const location = useLocation();
   const { videoDetails, videoId } = location?.state;
 
-
-
   const [
     VideosHandle,
     { isLoading: videosLoading, data: videosData, error: videosError },
@@ -31,6 +29,7 @@ export function MovieDetails() {
     method: "GET",
     search: `${videoId}/videos`,
   });
+
   const [
     CastCrewHandle,
     { isLoading: crewIsLoading, data: crewData, error: crewError },

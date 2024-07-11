@@ -1,7 +1,7 @@
 
 import { Button, Checkbox, Form, Input } from "antd";
 import { Route, useNavigate,Routes } from "react-router-dom";
-import Dashboard from "../dashboard";
+import Dashboard from "../../dashboard";
 
 export function Login(){
   let navigate=useNavigate();
