@@ -1,31 +1,17 @@
-import { useState } from "react";
 import { Row, Col } from "antd";
 
 import { Card } from "../../Components";
-import { SlideNextIcon, SlidePreviousIcon } from "../../icons";
 
 import styles from "./styles.module.scss";
 
 function Lists(props) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const { data, onChangeHandler } = props;
-
-  function onClickHandler(type) {
-    if (type === "previous") {
-      if (currentIndex > 0) {
-        setCurrentIndex((prevIndex) => prevIndex - 1);
-      }
-    } else {
-      if (currentIndex < data?.length - 6) {
-        setCurrentIndex((prevIndex) => prevIndex + 1);
-      }
-    }
-  }
+  const { data = [], onChangeHandler } = props;
 
   return (
-    <Container onClickHandler={onClickHandler}>
-      <Row>
+    <Container>
+      <Row
+        style={{ display: "flex", flexDirection: "row", flexWrap: "nowrap" }}
+      >
         {data?.map((item, index) => (
           <Col
             xl={4}
@@ -33,13 +19,7 @@ function Lists(props) {
             md={4}
             sm={4}
             xs={10}
-            key={`card-main-div ${item.id}`}
-            style={{
-              display:
-                index >= currentIndex && index < currentIndex + 6
-                  ? "block"
-                  : "none",
-            }}
+            key={`card-main-div ${index}`}
           >
             <Card
               item={item}
@@ -56,30 +36,11 @@ function Lists(props) {
   );
 }
 
-function Container({ children, onClickHandler }) {
+function Container({ children }) {
   return (
-    <Row>
-      <Col xl={1} lg={1} md={1} sm={1} xs={24}>
-        <div
-          className={styles.btnsClass}
-          onClick={() => onClickHandler("previous")}
-        >
-          <SlidePreviousIcon />
-        </div>
-      </Col>
-      <Col xl={22} lg={22} md={22} sm={22} xs={24}>
-        {" "}
-        <div style={{ height: "301px" }}>{children}</div>
-      </Col>
-      <Col xl={1} lg={1} md={1} sm={1} xs={24}>
-        <div
-          className={styles.btnsClass}
-          onClick={() => onClickHandler("next")}
-        >
-          <SlideNextIcon />
-        </div>
-      </Col>
-    </Row>
+    <div style={{ overflowX: "scroll", overflowY: "hidden", height: "60dvh", padding:"30px 0px" }}>
+      {children}
+    </div>
   );
 }
 

@@ -1,7 +1,8 @@
 .detailsHeader {
-  width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
+  height: 100%;
   background: linear-gradient(
     to left,
     rgba(31.5, 31.5, 31.5, 1) calc((50vw - 170px) - 340px),

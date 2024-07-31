@@ -31,7 +31,7 @@ function Overview() {
         isMoreDetails
       />
       <Row>
-        <Col xxl={4} xl={3} lg={6} md={7}>
+        <Col xxl={4} xl={3} lg={6} md={7} xs={12}>
           {selectedVideo?.map((elem) => (
             <Card item={elem} key={`card-${elem.id}`} isMeta>
               <Card.Cover path={elem?.poster_path} />
